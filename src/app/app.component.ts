@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'quiz tool';
+  question = 'what is the square root of two?'
 }
