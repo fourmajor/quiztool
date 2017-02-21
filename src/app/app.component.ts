@@ -18,7 +18,7 @@ const QUESTIONS: Question[] = [
 })
 export class AppComponent {
   title = 'quiz tool2';
-  question Question = {
+  question: Question = {
   	id: 1,
   	question: 'wh3at is the square root of two?',
   	answer: 'approximately 1.41'
