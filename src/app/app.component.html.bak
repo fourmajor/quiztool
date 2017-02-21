@@ -8,5 +8,5 @@
 
 <div>
 	<label>Answer:</label>
-	<input [(ngModel)]="question.answer" placeholder="answer">
+	<input value="{{question.answer}}" placeholder="answer">
 </div>

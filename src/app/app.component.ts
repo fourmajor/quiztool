@@ -12,10 +12,10 @@ export class Question {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'quiz tool';
+  title = 'quiz tool2';
   question: Question = {
   	id: 1,
-  	question: 'what is the square root of two?',
+  	question: 'wh3at is the square root of two?',
   	answer: 'approximately 1.41'
   }
 }
