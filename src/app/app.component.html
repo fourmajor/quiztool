@@ -2,18 +2,22 @@
   {{title}}
 </h1>
 
-<div>
-	<label>Question:</label> {{question.question}}
-</div>
-
-<div>
-	<label>Answer:</label>
-	<input [(ngModel)]="question.answer" placeholder="answer">
-</div>
-
-<h2>More Questions</h2>
+<h2>Questions:</h2>
 <ul class="questions">
-	<li *ngFor="let question of questions">
+	<li *ngFor="let question of questions" (click)="onSelect(question)">
 		<span class="question">{{question.question}}<br />{{question.answer}}</span>
 	</li>
-</ul>	
+</ul>
+
+<div *ngIf="selectedQuestion">
+	<h2>{{selectedQuestion.name}} details!</h2>
+	<div><label>id: </label>{{selectedQuestion.id}}</div>
+	<div>
+	    <label>question: </label>
+	    <input [(ngModel)]="selectedQuestion.question" placeholder="question"/>
+	</div>
+	<div>
+	    <label>answer: </label>
+	    <input [(ngModel)]="selectedQuestion.answer" placeholder="answer"/>
+	</div>
+</div>
