@@ -13,7 +13,7 @@
 
 <h2>More Questions</h2>
 <ul class="questions">
-	<li>
-		<li *ngFor="let question of questions">
+	<li *ngFor="let question of questions">
+		<span class="question">{{question.question}}<br />{{question.answer}}</span>
 	</li>
 </ul>	
