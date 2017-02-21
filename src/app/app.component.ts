@@ -21,7 +21,7 @@ export class AppComponent {
   title = 'quiz tool2';
   selectedQuestion: Question;
   questions = QUESTIONS;
-  onSelect(question: Question) void {
+  onSelect(question: Question): void {
     this.selectedQuestion = question;
   }
 }
