@@ -7,6 +7,7 @@ export class Question {
 }
 
 const QUESTIONS: Question[] = [
+  {id:1, question: 'What is the purpose of this quiz?', answer: 'The Wizards are good-ish all of a sudden.'},
   {id:2, question: 'What is shmooth\'s favorite player?', answer: 'Derek Fisher for some reason.'},
   {id:3, question: 'What is fourmajor\'s favorite player?', answer: 'Obviously J Wall'}
 ];
