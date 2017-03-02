@@ -7,7 +7,8 @@ export class Question {
 }
 
 const QUESTIONS: Question[] = [
-  {id:2, question: 'What is shmooth\'s favorite player?', answer: 'Derek Fisher for some reason.'},
+  {id:1, question: 'Should we build a great quiz tool?', answer: 'Yes. This has been another edition of Simple Answers to Simple Questions.'},
+  {id:2, question: 'What is shmooth\'s favorite player??', answer: 'Derek Fisher for some reason.'},
   {id:3, question: 'What is fourmajor\'s favorite player?', answer: 'Obviously J Wall'}
 ];
 
