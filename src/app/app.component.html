@@ -1,5 +1,7 @@
 
 
+<div class="centering-container">
+
 <div layout="row" flex layout-align="center center">
 <div layout="column" layout-align="center">
 
@@ -8,7 +10,7 @@
   {{title}}
 </h1>
 
-<h2>Questions:</h2>
+<!-- <h2>Questions:</h2> -->
 <ul class="questionanswerlist">
 	<li *ngFor="let question of questions" (click)="onSelect(question)">
 		<div class="question">{{question.question}}</div>
@@ -34,3 +36,4 @@
 </div>
 
 
+</div><!-- END centering-container -->
