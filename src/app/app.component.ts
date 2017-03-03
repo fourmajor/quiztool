@@ -8,9 +8,9 @@ export class Question {
 }
 
 const QUESTIONS: Question[] = [
-  {id:1, question: 'Should we build a great quiz tool?', answer: 'Yes. This has been another edition of Simple Answers to Simple Questions. That was a pretty great question, methinks.'},
-  {id:2, question: 'What is shmooth\'s favorite player??', answer: 'Derek Fisher for some reason.'},
-  {id:3, question: 'What is fourmajor\'s favorite player?', answer: 'Obviously J Wall'}
+  {id:1, question: 'Should we build a great quiz tool?', answer: 'Yes. This has been another edition of Simple Answers to Simple Questions. That was a pretty great question, methinks.', useranswer: ''},
+  {id:2, question: 'What is shmooth\'s favorite player??', answer: 'Derek Fisher for some reason.', useranswer: ''},
+  {id:3, question: 'What is fourmajor\'s favorite player?', answer: 'Obviously J Wall', useranswer: ''}
 ];
 
 @Component({
