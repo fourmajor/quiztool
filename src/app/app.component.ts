@@ -19,7 +19,7 @@ const QUESTIONS: Question[] = [
 })
 
 export class AppComponent {
-  title = 'quiz tool2';
+  title = 'Quiz Tool';
   selectedQuestion: Question;
   questions = QUESTIONS;
   onSelect(question: Question): void {
