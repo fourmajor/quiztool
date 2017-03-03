@@ -6,17 +6,21 @@
 <div layout="column" layout-align="center">
 
 
+<div class="content">
+
 <h1>
   {{title}}
 </h1>
 
 <!-- <h2>Questions:</h2> -->
-<ul class="questionanswerlist">
+<!-- <ol class="questionanswerlist"> -->
+<ol class="custom-counter">
 	<li *ngFor="let question of questions" (click)="onSelect(question)">
-		<div class="question">{{question.question}}</div>
+		<span class="question">{{question.question}}</span>
+        <div class="useranswer"><textarea rows="4" cols="50">{{question.useranswer}}</textarea></div>
         <div class="answer">{{question.answer}}</div>
 	</li>
-</ul>
+</ol>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
@@ -32,8 +36,11 @@
 </div>
 
 
+</div><!-- END 'content' -->
+
 </div>
 </div>
+
 
 
 </div><!-- END centering-container -->
