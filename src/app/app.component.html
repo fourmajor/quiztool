@@ -17,7 +17,7 @@
 <ol class="custom-counter">
 	<li *ngFor="let question of questions" (click)="onSelect(question)">
 		<span class="question">{{question.question}}</span>
-        <div class="useranswer"><textarea rows="4" cols="50">{{question.useranswer}}</textarea></div>
+        <div class="useranswer"><textarea class="textarea-default" rows="4" cols="80" placeholder="Type answer here please...">{{question.useranswer}}</textarea></div>
         <div class="answer">{{question.answer}}</div>
 	</li>
 </ol>

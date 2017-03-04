@@ -5,6 +5,8 @@ export class Question {
 	question: string;
     useranswer: string;
 	answer: string;
+    /* type: text, multiple choice, multiple-choice only one answer, image, drop-down, etc. */
+    /* Will we have subclasses? */
 }
 
 const QUESTIONS: Question[] = [
