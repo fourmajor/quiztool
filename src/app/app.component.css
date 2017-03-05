@@ -9,8 +9,8 @@ h1 {
 }
 
 ol {
-    border: 0px solid green;
-    margin: 0 auto;
+    border: 0px solid red;
+    margin: 10 auto;
 }
 
 textarea {
@@ -32,7 +32,6 @@ textarea {
 
 .btn-right {
     float: right;
-    margin: 3em;
 }
 
 button:hover {
@@ -55,7 +54,7 @@ button {
     min-height: 2em;
     min-width: 8em;
     /*height: 4em;*/
-    margin: 2em auto;
+    margin: 0em auto;
     border: 0px solid #00AA66;
     border-radius: 10%/50%;
     /*text-align: right;*/
@@ -149,7 +148,7 @@ button {
     /*text-align: left;*/
     width: 80%;
     margin: auto;
-    border: 0px solid;
+    border: 0px solid red;
     padding: 10px;
 }
 

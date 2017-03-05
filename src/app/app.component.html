@@ -14,7 +14,7 @@
 
 <!-- <h2>Questions:</h2> -->
 <!-- <ol class="questionanswerlist"> -->
-<ol class="custom-counter" style="float:center;">
+<ol class="custom-counter">
 	<li class="left" *ngFor="let question of questions; let firstQuestion=first;" (click)="onSelect(question)">
 		<span class="question">{{question.question}}</span>
         <!-- Set focus on the first textarea. That is, the first question on the quiz/page. -->
@@ -22,6 +22,8 @@
         <div class="answer">{{question.answer}}</div>
 	</li>
 </ol>
+
+<button type="submit" class="">Submit</button>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
@@ -36,15 +38,9 @@
 	</div>
 </div>
 
-<button type="submit" class="btn btn-success btn-right btn-lg">Submit</button>
-<!-- <button type="button" class="btn btn-default" (click)="newHero(); heroForm.reset()">New Hero</button> -->
-
-
 </div><!-- END 'content' -->
 
 </div>
 </div>
-
-
 
 </div><!-- END centering-container -->
