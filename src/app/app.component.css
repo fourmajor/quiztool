@@ -38,6 +38,7 @@ button:hover {
     /*background: rgba(255,255,255,0.3);*/
     /* background: lightgreen;*/
     filter: brightness(115%);
+    cursor: pointer;
 }
 
 button {
