@@ -14,19 +14,19 @@
 <!-- <h2>Questions:</h2> -->
 <!-- <ol class="questionanswerlist"> -->
 <ol class="custom-counter">
-	<li class="left" *ngFor="let question of questions; let firstQuestion=first;" (click)="onSelect(question)">
+	<li class="left" *ngFor="let question of quiz.questions; let firstQuestion=first;" (click)="alert('test');onSelect(question)">
 		<span class="question">{{question.question}}</span>
         <!-- Set focus on the first textarea. That is, the first question on the quiz/page. -->
-        <div class="useranswer"><textarea [autofocus]="firstQuestion" class="textarea-default" rows="4" cols="80" placeholder="Type answer here please...">{{question.useranswer}}</textarea></div>
-        <div class="answer">{{question.answer}}</div>
+        <div class="useranswer"><textarea ng-model="question.useranswer" [autofocus]="firstQuestion" class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">{{question.useranswer}}</textarea></div>
+        <div class="answer" [hidden]="!this.wasEvaluated">{{question.answer}}</div>
 	</li>
 </ol>
 
-<button type="submit" class="">Submit</button>
+<button (click)="asdf" ng-click="lkj" type="button" class="">Submit</button>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
-	<div><label>id: </label>{{selectedQuestion.id}}</div>
+	<div><label>id: </label>{{quiz.selectedQuestion.id}}</div>
 	<div>
 	    <label>question: </label>
 	    <input [(ngModel)]="selectedQuestion.question" placeholder="question"/>
@@ -34,6 +34,10 @@
 	<div>
 	    <label>answer: </label>
 	    <input [(ngModel)]="selectedQuestion.answer" placeholder="answer"/>
+	</div>
+	<div>
+	    <label>useranswer: </label>
+	    <input [(ngModel)]="selectedQuestion.useranswer" placeholder="useranswer"/>
 	</div>
 </div>
 
