@@ -12,7 +12,7 @@ export class Question {
 }
 
 const QUESTIONS: Question[] = [
-  {id:1, question: 'Should we build a great quiz tool?', answer: 'Yes. This has been another edition of Simple Answers to Simple Questions. That was a pretty great question, methinks.', useranswer: '', quizid: 1}
+  {id:1, question: 'Should we build a great quiz tool?', answer: 'Yes.', useranswer: '', quizid: 1}
   /* {id:2, question: 'What is shmooth\'s favorite player??', answer: 'Derek Fisher for some reason.', useranswer: ''}*/
   /*{id:3, question: 'What is fourmajor\'s favorite player?', answer: 'Obviously J Wall', useranswer: ''}*/
 ];
@@ -22,10 +22,27 @@ export class Quiz {
     wasEvaluated: boolean; // why not just set it here?
     questions: Question[]; // get the list of questions from statis data, or service/db, etc.
     selectedQuestion: Question;
+
     constructor() { 
         this.wasEvaluated = false;
         this.questions = QUESTIONS;
     }
+
+    /**
+    * Score the quiz.
+    */
+    evaluate(){
+        console.log('Evaluating from within Quiz object...');
+        
+        // for each question on the quiz, check if the provided answer is correct
+        for (let question of this.questions) {
+            //if (QuestionAnsweredCorrectly()){
+            //}
+            console.log(question); // 1, "string", false
+        }
+
+    }
+    
 }
 
 @Component({
@@ -38,14 +55,30 @@ export class AppComponent {
     title = 'Quiz Tool';
     quiz = new Quiz();
 
-    doAlert(){
+    /**
+    * Evaluate (score) the quiz. 
+    */
+    evaluate(){
+        this.log('Evaluating...');
+        this.quiz.evaluate();
         this.quiz.wasEvaluated=true;
-        console.log('log: test log, yo...'); // black
+    }
+
+    /**
+    * Simple wrapper function to log stuff to the javascript console.
+    */
+    log(message: String){
+        console.log( message ); // black
+        /*
         console.debug('debug: test log, yo...'); // blue
         console.warn('warn: test log, yo...'); // yellow
         console.info('info: test log, yo...'); // black (with 'i' icon indicator)
         console.error('error: test log, yo...'); // red
-        alert('test...');
+        */
+    }
+
+    alert(message: String){
+        alert(message);
     }
         
     onSelect(question: Question): void {

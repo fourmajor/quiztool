@@ -18,11 +18,11 @@
 		<span class="question">{{question.question}}</span>
         <!-- Set focus on the first textarea. That is, the first question on the quiz/page. -->
         <div class="useranswer"><textarea ng-model="question.useranswer" [autofocus]="firstQuestion" class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">{{question.useranswer}}</textarea></div>
-        <div class="answer" [hidden]="!this.wasEvaluated">{{question.answer}}</div>
+        <div class="answer" [hidden]="!quiz.wasEvaluated">{{question.answer}}</div>
 	</li>
 </ol>
 
-<button (click)="doAlert();" type="button" class="">Submit</button>
+<button  (click)="evaluate();" type="button" class="">Submit</button>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
