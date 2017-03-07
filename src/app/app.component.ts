@@ -20,18 +20,13 @@ const QUESTIONS: Question[] = [
 export class Quiz {
     // has the Quiz been evaluated and scored?
     wasEvaluated: boolean; // why not just set it here?
-
     questions: Question[]; // get the list of questions from statis data, or service/db, etc.
-
     selectedQuestion: Question;
-
     constructor() { 
         this.wasEvaluated = false;
         this.questions = QUESTIONS;
     }
-
 }
-
 
 @Component({
     selector: 'app-root',
@@ -39,12 +34,18 @@ export class Quiz {
     //template:`<h2>Hello, world</h2>` ,
     styleUrls: ['./app.component.css']
 })
-
 export class AppComponent {
     title = 'Quiz Tool';
     quiz = new Quiz();
 
     doAlert(){
+        this.quiz.wasEvaluated=true;
+        console.log('log: test log, yo...'); // black
+        console.debug('debug: test log, yo...'); // blue
+        console.warn('warn: test log, yo...'); // yellow
+        console.info('info: test log, yo...'); // black (with 'i' icon indicator)
+        console.error('error: test log, yo...'); // red
+        alert('test...');
     }
         
     onSelect(question: Question): void {

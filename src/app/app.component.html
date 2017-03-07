@@ -14,7 +14,7 @@
 <!-- <h2>Questions:</h2> -->
 <!-- <ol class="questionanswerlist"> -->
 <ol class="custom-counter">
-	<li class="left" *ngFor="let question of quiz.questions; let firstQuestion=first;" (click)="alert('test');onSelect(question)">
+	<li class="left" *ngFor="let question of quiz.questions; let firstQuestion=first;">
 		<span class="question">{{question.question}}</span>
         <!-- Set focus on the first textarea. That is, the first question on the quiz/page. -->
         <div class="useranswer"><textarea ng-model="question.useranswer" [autofocus]="firstQuestion" class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">{{question.useranswer}}</textarea></div>
@@ -22,7 +22,7 @@
 	</li>
 </ol>
 
-<button (click)="asdf" ng-click="lkj" type="button" class="">Submit</button>
+<button (click)="doAlert();" type="button" class="">Submit</button>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
