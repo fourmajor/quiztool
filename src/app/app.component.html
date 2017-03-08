@@ -11,13 +11,15 @@
   {{title}}
 </h1>
 
+<!-- testVar: <input type="text" name="testVar" [(ngModel)]="testVar" /> -->
+
 <!-- <h2>Questions:</h2> -->
 <!-- <ol class="questionanswerlist"> -->
 <ol class="custom-counter">
 	<li class="left" *ngFor="let question of quiz.questions; let firstQuestion=first;">
 		<span class="question">{{question.question}}</span>
         <!-- Set focus on the first textarea. That is, the first question on the quiz/page. -->
-        <div class="useranswer"><textarea ng-model="question.useranswer" [autofocus]="firstQuestion" class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">{{question.useranswer}}</textarea></div>
+        <div class="useranswer"><textarea [(ngModel)]="question.useranswer" [autofocus]="firstQuestion" class="textarea-default" rows="2" cols="80" placeholder="Type answer here please..."></textarea></div>
         <div class="answer" [hidden]="!quiz.wasEvaluated">{{question.answer}}</div>
 	</li>
 </ol>
