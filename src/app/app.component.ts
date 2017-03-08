@@ -42,7 +42,7 @@ export class Quiz {
         var q = new Question();
         q.id = 1;
         q.question = "Should we build a great quiz tool?";
-        q.answer = "Yes";
+        q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q); // will this blow up?
@@ -50,7 +50,7 @@ export class Quiz {
         q = new Question();
         q.id = 1;
         q.question = "What is shmooth\'s favorite player?";
-        q.answer = "No";
+        q.answer = "no";
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q);
@@ -81,9 +81,13 @@ export class Quiz {
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    title = 'Quiz Tool';
+    title: String = 'Quiz Tool';
     quiz = new Quiz();
     testVar: String = "peter is cool";
+
+    newQuiz() {
+        this.quiz = new Quiz();
+    }
 
     /**
     * Simple wrapper function to log stuff to the javascript console.

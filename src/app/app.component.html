@@ -22,10 +22,11 @@
                     [autofocus]="firstQuestion" 
                     [disabled]="quiz.wasEvaluated"
                     [ngClass]="{'disabled': quiz.wasEvaluated}"
+                    (keydown.enter)="quiz.evaluate();"
                     class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
         </textarea>
         </div>
-        <div [ngClass]="{'correct':question.wasCorrect(),'incorrect':!question.wasCorrect()}" style="margin: 0px; width: 100%;" class="answer" [hidden]="!quiz.wasEvaluated">
+        <div [ngClass]="{'correct':question.wasCorrect(),'incorrect':!question.wasCorrect()}" style="" class="answer" [hidden]="!quiz.wasEvaluated">
             <i [ngClass]="{'fa-check-circle-o': question.wasCorrect(), 'fa-times-circle': !question.wasCorrect()}" 
                 class="fa fa-3x" aria-hidden="true"></i>
 {{question.answer}}
@@ -33,7 +34,9 @@
 	</li>
 </ol>
 
-<button  (click)="quiz.evaluate();" type="button" class="">Submit</button>
+<button [ngClass]="{'disabled-button':quiz.wasEvaluated}" [disabled]="quiz.wasEvaluated" (click)="quiz.evaluate();" type="button">Learn</button>
+
+<button [ngClass]="" class="continue" [hidden]="!quiz.wasEvaluated" (click)="newQuiz();" type="button">Continue</button>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
