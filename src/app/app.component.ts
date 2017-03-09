@@ -5,19 +5,19 @@ export class Question {
 	id: number;
 	question: string;
 	answer: string;
-    useranswer: string;
-    quizid: number;
-    quiz: Quiz; // include ref back to parent object, the Quiz
+  useranswer: string;
+  quizid: number;
+  quiz: Quiz; // include ref back to parent object, the Quiz
 
-    wasCorrect(){
+  wasCorrect(){
 
-        //this.quiz.log('useranswer: ' + this.useranswer);
-        //log('answer: ' + this.answer);
+    //this.quiz.log('useranswer: ' + this.useranswer);
+    //log('answer: ' + this.answer);
 
-        if (this.useranswer == this.answer){
-            return true;
-        }
-        return false;
+    if (this.useranswer == this.answer){
+        return true;
+    }
+    return false;
     }
 
     /* type: text, multiple choice, multiple-choice only one answer, image, drop-down, etc. */
