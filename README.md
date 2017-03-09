@@ -6,7 +6,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Clone this repo to your local dev machine/server (`cd [your_main_dev_directory]; git clone https://github.com/fourmajor/quiztool.git` --> this will create a directory `quiztool` in your main dev directory. cd into it.).
 
-Install npm if you have not already, then run `npm install` from the top-level directory (the one containing the package.json file). This will install all the dependencies of the project and you can proceed to cranking up your dev server (below).
+Install npm if you have not already ( https://nodejs.org/en/download/ ), then run `npm install` from the top-level directory (the one containing the package.json file). This will install all the dependencies of the project and you can proceed to cranking up your dev server (below).
+
+You may also need to install the cli package globally for the 'ng' server (below) to show up.
+
+`npm install -g @angular/cli@latest`
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
