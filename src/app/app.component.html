@@ -17,9 +17,9 @@
 	<li class="left" *ngFor="let question of quiz.questions; let firstQuestion=first;">
 		<span class="question">{{question.question}}</span>
         <!-- Set focus on the first textarea. That is, the first question on the quiz/page. -->
+        <!-- Now we manage autofocus in component, so this [autofocus]="firstQuestion" is not longer needed -->
         <div class="useranswer">
         <textarea   [(ngModel)]="question.useranswer" 
-                    [autofocus]="firstQuestion" 
                     [disabled]="quiz.wasEvaluated"
                     [ngClass]="{'disabled': quiz.wasEvaluated}"
                     (keydown.enter)="quiz.evaluate();"
