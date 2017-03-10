@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 
 export class Question {
@@ -85,8 +85,24 @@ export class AppComponent {
     quiz = new Quiz();
     testVar: String = "peter is cool";
 
+    @ViewChild('focusThis') focusThis;
+    
+    //O to focus
+    id:number=0
+
+    constructor(){}
+
     newQuiz() {
         this.quiz = new Quiz();
+        this.id=0
+    }
+
+    //wait for viewchild to update then focus
+    ngAfterViewChecked(){
+        if(this.id == 0){
+            this.focusThis.nativeElement.focus();
+            this.id++
+        }
     }
 
     /**
