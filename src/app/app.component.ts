@@ -46,7 +46,7 @@ export class Quiz {
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q); // will this blow up?
-/*
+
         q = new Question();
         q.id = 1;
         q.question = "What is shmooth\'s favorite player?";
@@ -54,7 +54,7 @@ export class Quiz {
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q);
-*/
+
     }
  
 
