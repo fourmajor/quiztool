@@ -19,7 +19,8 @@
         <!-- Set focus on the first textarea. That is, the first question on the quiz/page. -->
         <!-- Now we manage autofocus in component, so this [autofocus]="firstQuestion" is not longer needed -->
         <div class="useranswer">
-        <textarea   [(ngModel)]="question.useranswer" 
+        <textarea   #focusThis
+                    [(ngModel)]="question.useranswer" 
                     [disabled]="quiz.wasEvaluated"
                     [ngClass]="{'disabled': quiz.wasEvaluated}"
                     (keydown.enter)="quiz.evaluate();"
