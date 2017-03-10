@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 
 export class Question {
@@ -85,8 +85,17 @@ export class AppComponent {
     quiz = new Quiz();
     testVar: String = "peter is cool";
 
+    constructor(
+        private element: ElementRef
+    ){}
+
     newQuiz() {
         this.quiz = new Quiz();
+    }
+
+    //wait for viewchild to update then focus
+    ngAfterViewChecked(){
+        this.element.nativeElement.querySelectorAll('textarea')[0].focus()
     }
 
     /**
