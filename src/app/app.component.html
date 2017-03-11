@@ -35,8 +35,12 @@
 	</li>
 </ol>
 
+
+<div *ngIf="quiz.wasEvaluated" class="quiz-done">{{quiz.quiz_done_status_message}}</div>
+
 <button [ngClass]="{'disabled-button':quiz.wasEvaluated}" 
 		[disabled]="quiz.wasEvaluated" 
+		[hidden]="quiz.wasEvaluated"
 		(click)="quiz.evaluate();" 
 		type="button">Learn</button>
 
@@ -45,7 +49,7 @@
 		[hidden]="!quiz.wasEvaluated" 
 		(click)="newQuiz();" 
 		type="button" #continueButton 
-		id="continueButton">Continue</button>
+		id="continueButton">Play Again</button>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
