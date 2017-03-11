@@ -1,27 +1,20 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 
 export class Question {
 	id: number;
 	question: string;
 	answer: string;
-  useranswer: string;
-  quizid: number;
-  quiz: Quiz; // include ref back to parent object, the Quiz
+  	useranswer: string;
+  	quizid: number;
+  	quiz: Quiz; // include ref back to parent object, the Quiz
 
-  wasCorrect(){
-
-    //this.quiz.log('useranswer: ' + this.useranswer);
-    //log('answer: ' + this.answer);
-
-    if (this.useranswer == this.answer){
-        return true;
+  	wasCorrect(){
+    	if (this.useranswer == this.answer){
+        	return true;
+    	}
+    	return false;
     }
-    return false;
-    }
-
-    /* type: text, multiple choice, multiple-choice only one answer, image, drop-down, etc. */
-    /* Will we have subclasses? */
 }
 
 export class Quiz {
@@ -54,21 +47,16 @@ export class Quiz {
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q);
-
     }
  
-
-
     /**
     * Score the quiz.
     */
     evaluate(){
-
-        console.log('Evaluating from within Quiz object...');
-        
+        //console.log('Evaluating from within Quiz object...');
         // for each question on the quiz, check if the provided answer is correct
         for (let question of this.questions) {
-            console.log(question); // 1, "string", false
+            //console.log(question); // 1, "string", false
         }
         this.wasEvaluated=true;
     }
@@ -78,19 +66,24 @@ export class Quiz {
     selector: 'app-root',
     templateUrl: './app.component.html',
     //template:`<h2>Hello, world</h2>` ,
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
     title: String = 'Quiz Tool';
+	//cdr: ChangeDetectorRef;
     quiz = new Quiz();
-    testVar: String = "peter is cool";
 
     @ViewChild('focusThis') focusThis;
+    @ViewChild('continueButton') continueButton;
     
     //O to focus
     id:number=0
 
-    constructor(){}
+ 	//constructor(cdr: ChangeDetectorRef) {
+ 	constructor() {
+    	//this.cdr = cdr;
+  	}
 
     newQuiz() {
         this.quiz = new Quiz();
@@ -99,10 +92,23 @@ export class AppComponent {
 
     //wait for viewchild to update then focus
     ngAfterViewChecked(){
-        if(this.id == 0){
-            this.focusThis.nativeElement.focus();
-            this.id++
+    	//this.cdr.detectChanges();
+        if( (!this.quiz.wasEvaluated) && (this.id == 0) ){
+			// this is a crazy hack b/c Angular sucks
+			setTimeout(() => {
+            	this.focusThis.nativeElement.focus();
+            	this.id++;
+    		}, 1);
         }
+		if (this.quiz.wasEvaluated){
+			// this is a crazy hack b/c Angular sucks
+			setTimeout(() => {
+				this.continueButton.nativeElement.focus(); // then focus us on the 'Continue' button
+    		}, 1);
+			//console.log(this.continueButton);
+		}
+    	//this.cdr.detectChanges();
+		//console.log('document.activeElement.id: ' + document.activeElement.id);
     }
 
     /**

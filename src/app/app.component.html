@@ -35,9 +35,17 @@
 	</li>
 </ol>
 
-<button [ngClass]="{'disabled-button':quiz.wasEvaluated}" [disabled]="quiz.wasEvaluated" (click)="quiz.evaluate();" type="button">Learn</button>
+<button [ngClass]="{'disabled-button':quiz.wasEvaluated}" 
+		[disabled]="quiz.wasEvaluated" 
+		(click)="quiz.evaluate();" 
+		type="button">Learn</button>
 
-<button [ngClass]="" class="continue" [hidden]="!quiz.wasEvaluated" (click)="newQuiz();" type="button">Continue</button>
+<button [ngClass]="" 
+		class="continue" 
+		[hidden]="!quiz.wasEvaluated" 
+		(click)="newQuiz();" 
+		type="button" #continueButton 
+		id="continueButton">Continue</button>
 
 <div *ngIf="selectedQuestion">
 	<h2>{{selectedQuestion.name}} details!</h2>
