@@ -187,7 +187,8 @@ button {
 	overflow: auto;
 	background-color: #0000ff; /*lightblue;*/
 	color: white;
-    margin: 1em; 
+    /*margin: 0em; */
+    margin: 1em auto;
 	padding: 0.5em;
     width: 80%;
     border: 1px solid #0000ff;
