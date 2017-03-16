@@ -23,13 +23,14 @@ h1 {
 /* END FONT AWESOME CUSTOMIZATIONS */
 
 
-.left {
+.questionlist {
     text-align: left;
 }
 
 ol {
     border: 0px solid red;
     margin: 10 auto;
+	width: 100%;
 }
 
 .disabled {
@@ -132,7 +133,7 @@ button {
 }
 
 .custom-counter li {
-    counter-increment: step-counter;
+    /* counter-increment: step-counter; */
     border-radius: 25px;
     border: 2px solid #73AD21;
     padding: 20px; 
@@ -143,7 +144,7 @@ button {
 }
 
 .custom-counter li::before {
-  content: counter(step-counter);
+  /* content: counter(step-counter); */
   margin-right: 5px;
   font-size: 2em;
   /* background-color: rgb(0,200,200); */
@@ -200,17 +201,53 @@ button {
 }
 
 .useranswer {
-    margin-left: 2.8em;
-    margin-top: 2em;
-    margin-bottom: 2em;
+	clear: both;
+    /*margin-left: 2.8em;*/
+	margin: 10px 0px 10px 0px;
+	padding: 10px 0px 0px 10px;
     font-size: 1em;
 }
 
+.questionanswer {
+	float: left;
+}
+
+.questionheader {
+	border: 0px solid red;
+	overflow: auto;
+	/*position: relative;*/
+/*
+	width: 100%;
+	margin: 10px 0px 10px 0px;
+	padding: 10px;
+*/
+}
+
+.questionnumber {
+	/*background-color: #0000ff; */
+	background: lightgreen;
+	margin: 0px 10px 0px 0px;
+	padding: 0px 10px 0px 10px;
+    border-radius: 10px;
+	float: left;
+    font-size: 2.0em;
+	/*width: 10%;*/
+    border: 1px solid lightgrey;
+}
+
+.questiontitle {
+	vertical-align: middle;
+	padding: 0px 5px 0px 5px;
+	margin: 5px 5px 5px 5px;
+	/*float: left;*/
+    font-size: 1.5em;
+    border: 0px solid lightgray;
+}
 
 .question {
-    text-align: left;
-    font-size: 1.5em;
-    margin-bottom: 2em;
+	text-align: left;
+	border: 0px solid lightgrey;
+    margin-bottom: 3em;
 }
 
 
@@ -229,6 +266,14 @@ button {
     margin: auto;
     border: 0px solid red;
     padding: 10px;
+}
+
+.highlight {
+    border-radius: 20px;
+	background: yellow;
+	margin: 0.5em;
+	padding: 0.5em;
+	font-size: 1.5em;
 }
 
 

@@ -21,7 +21,9 @@ export class Question {
 	}
 }
 
+
 export class Quiz {
+	start: number = 50;
     // has the Quiz been evaluated and scored?
     wasEvaluated: boolean; // why not just set it here?
     questions: Question[]; // get the list of questions from statis data, or service/db, etc.
@@ -30,6 +32,66 @@ export class Quiz {
 	score_percentage: number;
 	passed: boolean; // did user pass the quiz?
 	quiz_done_status_message: String;
+	quiz_display_type: String;
+	question_index: number; // which question are we currently showing? 0-indexed
+
+	// doing this instead of using Enum b/c Typescript sucks
+	ALL_QUESTIONS_AT_ONCE:  String = "All Questions At Once";
+    ONE_QUESTION_AT_A_TIME: String = "One Question At A Time";
+
+	getQuestion(index: number = 0){
+		return this.questions[this.question_index];
+	}
+	getCurrentQuestion(){
+		return this.questions[this.question_index];
+	}
+
+	getNextQuestion(){
+		console.log("question_index: " + this.question_index);
+		console.log("question: " + this.questions[this.question_index].question);
+		console.log("\n\n");
+		//Question q = this.questions[++this.question_index];
+		//return q;
+		return "";
+		//return this.questions[++this.question_index];
+	}
+
+	/**
+    * What should the next action be? Provide another question, or score/evaluate the quiz?
+	*/
+	nextQuestion(){
+		return this.questions[++this.question_index];
+	}
+
+	evaluateThisQuestion(event){
+		if (this.question_index>= (this.questions.length - 1) ){
+			console.log('out of questions! evaluating quiz now.');
+			this.evaluate();
+		}
+		else{
+			this.nextQuestion();
+			console.log('We are evaluating this question...' + event);
+			event.stopPropagation();
+			return false;
+		}
+	}
+
+	/**
+     * Grab the next question, I guess.
+	 */
+	next(){
+		if (this.question_index>= (this.questions.length - 1) ){
+			console.log('out of questions! evaluating quiz now.');
+			this.evaluate();
+		} else {
+			console.log('here...');
+			this.getCurrentQuestion().useranswer='';
+			console.log('...'+this.getCurrentQuestion().useranswer+'...');
+			this.question_index = this.question_index + 1;
+			//console.log('...'+this.getCurrentQuestion().useranswer+'...');
+			this.getCurrentQuestion().useranswer='';
+		}
+	}
 
 	userPassed(){
 		if (this.score_percentage >= this.pass_percentage) {
@@ -39,6 +101,10 @@ export class Quiz {
 	}
 
     constructor() { 
+		this.question_index = 0;
+		this.quiz_display_type = this.ONE_QUESTION_AT_A_TIME;
+		//this.quiz_display_type = this.ALL_QUESTIONS_AT_ONCE;
+
 		this.pass_percentage = 90; // % required to pass a quiz
 		this.score_percentage = 0; // use did not score anything yet, but we default to 0
 
@@ -103,11 +169,13 @@ export class Quiz {
     templateUrl: './app.component.html',
     //template:`<h2>Hello, world</h2>` ,
     styleUrls: ['./app.component.css'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.OnPush, // not sure if still needed; see setTimeout() hack
 })
 export class AppComponent {
     title: String = 'Quiz Tool';
-    quiz = new Quiz();
+    quiz: Quiz;
+
+	start: number = 50;
 
     @ViewChild('focusThis') focusThis;
     @ViewChild('continueButton') continueButton;
@@ -116,6 +184,9 @@ export class AppComponent {
     id:number=0;
 
  	constructor() {
+
+		this.quiz = new Quiz();
+
   	}
 
     newQuiz() {
