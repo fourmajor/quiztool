@@ -78,7 +78,7 @@
         <textarea   id="usernanswer" #focusThis
                     [(ngModel)]="quiz.getCurrentQuestion().useranswer" 
                     [disabled]="quiz.wasEvaluated"
-   	                (keydown.enter)="quiz.evaluateThisQuestion($event);"
+   	                (keydown.enter)="quiz.evaluateThisQuestion($event);this.focusSet=false;this.focused=0;"
                     [ngClass]="{'disabled': quiz.wasEvaluated}"
                     class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
         </textarea>
@@ -96,9 +96,16 @@
 <button [ngClass]="" 
 		class="continue" 
 		[hidden]="quiz.wasEvaluated" 
-		(click)="quiz.evaluateThisQuestion();" 
+		(click)="quiz.evaluateThisQuestion();this.focusSet=false;this.focused=0;" 
 		type="button" #continueButton 
 		id="continueButton">Continue</button>
+
+<button [ngClass]="" 
+		class="nextquiz" 
+		[hidden]="!quiz.wasEvaluated" 
+		(click)="newQuiz();" 
+		type="button" #nextQuizButton 
+		id="nextQuizButton">Next Quiz</button>
 
 </div> <!-- END of ALL_QUESTIONS_AT_ONCE type of quiz -->
 
