@@ -73,6 +73,8 @@ export class Quiz {
 	}
 
 	evaluateThisQuestion(event){
+		//alert('sup');
+			//event.stopPropagation(); // don't allow the 'eval'/enter event to be processed twice
 		if (this.question_index>= (this.questions.length - 1) ){
 			//console.log('out of questions! evaluating quiz now.');
 			this.evaluate();
@@ -86,8 +88,10 @@ export class Quiz {
 		if(event){ // event not here for clicks, apparently?
 			event.stopPropagation(); // don't allow the 'eval'/enter event to be processed twice
 									 // else the 'review' screen at end will be skipped
+			console.log('I am preventing the default...');
+			event.preventDefault(); // don't allow the 'eval'/enter event to be processed twice
 		}
-		return false;
+		//return false;
 	}
 
 	/**
@@ -119,6 +123,8 @@ export class Quiz {
 		this.question_index = 0;
 		this.quiz_display_type = this.ONE_QUESTION_AT_A_TIME;
 		//this.quiz_display_type = this.ALL_QUESTIONS_AT_ONCE;
+
+		this.isActive = true; // this we should prob do somewhere else...when first question is displayed...
 
 		this.pass_percentage = 90; // % required to pass a quiz
 		this.score_percentage = 0; // use did not score anything yet, but we default to 0
@@ -213,7 +219,7 @@ export class AppComponent {
 
 	handleKeyboardEvents(event: KeyboardEvent) {
         if(event.keyCode==13){
-			//console.log('we got an enter keydown...' + event.keyCode);
+			console.log('we got an enter keydown...' + event.keyCode);
 
 			if(this.quiz.isActive){
 				// then why is this being called?
@@ -225,7 +231,9 @@ export class AppComponent {
 				this.newQuiz();
 			}
 
-			return false;
+			//event.stopPropagation(); // don't allow the 'eval'/enter event to be processed twice
+
+			//return false;
 			// RED_FLAG: we need a way to know if this quiz was _just_ evaluated, or if it's at some other stage now.
 			// shiiiiiiiiit
 			//this.focusSet=false;
@@ -235,6 +243,8 @@ export class AppComponent {
 			//	return false;
 			//}
 		}
+
+		//alert('here');
     }
 
 
@@ -262,9 +272,9 @@ export class AppComponent {
     // this is seemingly called every time the view is effected, including every keystroke, entering text, etc.
     ngAfterViewChecked(){
 
-		console.log('ngAfterViewChecked() is being called...');
+		//console.log('ngAfterViewChecked() is being called...');
 
-		console.log('value of focused is ' + this.focused);
+		//console.log('value of focused is ' + this.focused);
 
 		if( (! this.focusSet) && (this.focused < 10) ){
 				setTimeout(() => {
@@ -275,7 +285,7 @@ export class AppComponent {
 				}, 1);
 		}
 		else{
-			console.log('focus is set...already.');
+			//console.log('focus is set...already.');
 		}
 			
 	}

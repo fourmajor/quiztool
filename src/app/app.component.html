@@ -78,7 +78,7 @@
         <textarea   id="usernanswer" #focusThis
                     [(ngModel)]="quiz.getCurrentQuestion().useranswer" 
                     [disabled]="quiz.wasEvaluated"
-   	                (keydown.enter)="quiz.evaluateThisQuestion($event);this.focusSet=false;this.focused=0;"
+   	                (keydown.enter)="quiz.evaluateThisQuestion($event);this.focusSet=false;this.focused=0;$event.preventDefault();"
                     [ngClass]="{'disabled': quiz.wasEvaluated}"
                     class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
         </textarea>
