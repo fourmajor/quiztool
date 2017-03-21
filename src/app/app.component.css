@@ -204,7 +204,7 @@ button {
 	clear: both;
     /*margin-left: 2.8em;*/
 	margin: 10px 0px 10px 0px;
-	padding: 10px 0px 0px 10px;
+	padding: 10px 0px 0px 0px;
     font-size: 1em;
 }
 
@@ -237,8 +237,8 @@ button {
 
 .questiontitle {
 	vertical-align: middle;
-	padding: 0px 5px 0px 5px;
-	margin: 5px 5px 5px 5px;
+	padding: 0px 5px 0px 0px;
+	margin: 5px 5px 5px 0px;
 	/*float: left;*/
     font-size: 1.5em;
     border: 0px solid lightgray;

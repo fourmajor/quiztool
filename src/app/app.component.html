@@ -23,15 +23,15 @@
 			<div class="useranswer">
 				<textarea   #focusThis
    	                 [(ngModel)]="question.useranswer" 
-   	                 [disabled]="quiz.wasEvaluated"
-   	                 [ngClass]="{'disabled': quiz.wasEvaluated}"
+   	                 [disabled]="quiz.wasEvaluated()"
+   	                 [ngClass]="{'disabled': quiz.wasEvaluated()}"
    	                 (keydown.enter)="quiz.evaluate();"
    	                 class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
 				</textarea>
 			</div>
 			<div [ngClass]="{'correct':question.wasCorrect(),'incorrect':!question.wasCorrect()}" 
 				class="answer" 
-				[hidden]="!quiz.wasEvaluated">
+				[hidden]="!quiz.wasEvaluated()">
 				<i [ngClass]="{'fa-check-circle-o': question.wasCorrect(), 'fa-times-circle': !question.wasCorrect()}" 
 					class="fa fa-3x" aria-hidden="true"></i> {{question.answer}} 
 			</div>
@@ -39,16 +39,16 @@
 	</div>
 
 
-<div *ngIf="quiz.wasEvaluated" class="quiz-done">{{quiz.quiz_done_status_message}}</div>
-<button [ngClass]="{'disabled-button':quiz.wasEvaluated}" 
-		[disabled]="quiz.wasEvaluated" 
-		[hidden]="quiz.wasEvaluated"
+<div *ngIf="quiz.wasEvaluated()" class="quiz-done">{{quiz.quiz_done_status_message}}</div>
+<button [ngClass]="{'disabled-button':quiz.wasEvaluated()}" 
+		[disabled]="quiz.wasEvaluated()" 
+		[hidden]="quiz.wasEvaluated()"
 		(click)="quiz.evaluate();" 
 		type="button">Learn</button>
 
 <button [ngClass]="" 
 		class="continue" 
-		[hidden]="!quiz.wasEvaluated" 
+		[hidden]="!quiz.wasEvaluated()" 
 		(click)="newQuiz();" 
 		type="button" #continueButton 
 		id="continueButton">Play Again</button>
@@ -72,37 +72,42 @@
   {{title}}
 </h1>
 
-<div class="question">
+<div class="question" style="border: 0px solid red;">
 		<span class="questiontitle">{{quiz.getCurrentQuestion().question}}</span>
         <div class="useranswer">
-        <textarea   id="usernanswer" #focusThis
+        <textarea   id="useranswer" #focusThis
+					style="border: 0px solid blue;"
                     [(ngModel)]="quiz.getCurrentQuestion().useranswer" 
-                    [disabled]="quiz.wasEvaluated"
-   	                (keydown.enter)="quiz.evaluateThisQuestion($event);this.focusSet=false;this.focused=0;$event.preventDefault();"
-                    [ngClass]="{'disabled': quiz.wasEvaluated}"
+                    [disabled]="quiz.getCurrentQuestion().wasAnswered()"
+   	                (keydown.enter)="submitForm($event);"
+                    [ngClass]="{'disabled': quiz.getCurrentQuestion().wasAnswered()}"
                     class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
         </textarea>
         </div>
-        <div [ngClass]="{'correct':false,'incorrect':false}" style="" class="answer" [hidden]="!quiz.wasEvaluated">
-            <i [ngClass]="{'fa-check-circle-o': false, 'fa-times-circle': false}" 
-                class="fa fa-3x" aria-hidden="true"></i>
-			{{quiz.getCurrentQuestion().answer}}
+
+        <div 	[ngClass]="{'correct':quiz.getCurrentQuestion().wasCorrect(),'incorrect':!quiz.getCurrentQuestion().wasCorrect()}" 
+				class="answer" 
+				style="border: 0px solid green;"
+				[hidden]="!quiz.getCurrentQuestion().wasAnswered()">
+            		<i 	[ngClass]="{'fa-check-circle-o': quiz.getCurrentQuestion().wasCorrect(), 'fa-times-circle': !quiz.getCurrentQuestion().wasCorrect()}" 	
+						class="fa fa-3x" aria-hidden="true"></i>
+							{{quiz.getCurrentQuestion().answer}}
         </div>
 </div>
 
 
-<div *ngIf="quiz.wasEvaluated" class="quiz-done">{{quiz.quiz_done_status_message}}</div>
+<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">{{quiz.quiz_done_status_message}}</div>
 
 <button [ngClass]="" 
 		class="continue" 
-		[hidden]="quiz.wasEvaluated" 
-		(click)="quiz.evaluateThisQuestion();this.focusSet=false;this.focused=0;" 
+		[hidden]="quiz.wasEvaluated()" 
+		(click)="submitForm($event);" 
 		type="button" #continueButton 
-		id="continueButton">Continue</button>
+		id="continueButton">{{quiz.getCheckOrContinue()}}</button>
 
 <button [ngClass]="" 
 		class="nextquiz" 
-		[hidden]="!quiz.wasEvaluated" 
+		[hidden]="!quiz.wasEvaluated()" 
 		(click)="newQuiz();" 
 		type="button" #nextQuizButton 
 		id="nextQuizButton">Next Quiz</button>

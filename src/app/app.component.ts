@@ -1,4 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { 
+	animate,
+	ChangeDetectionStrategy, 
+	ChangeDetectorRef, 
+	Component, 
+	Input, 
+	keyframes,
+	Output, 
+	EventEmitter, 
+	state,
+	style,
+	transition,
+	trigger,
+	ViewChild } from '@angular/core';
 
 
 export class Question {
@@ -6,6 +19,7 @@ export class Question {
 	question: string;
 	answer: string;
   	useranswer: string;
+	_wasAnswered: Boolean = false;
   	quizid: number;
   	quiz: Quiz; // include ref back to parent object, the Quiz
 
@@ -16,11 +30,16 @@ export class Question {
     	return false;
     }
 
+	setAnswered(torf:Boolean){
+		this._wasAnswered = torf;
+	}
+
+	answered(){
+		this._wasAnswered = true;
+	}
+
 	wasAnswered(){
-		if(this.useranswer){
-			return false;
-		}
-		return true;
+		return this._wasAnswered;
 	}
 
 	// i kind of like this name better
@@ -33,10 +52,10 @@ export class Question {
 export class Quiz {
 	start: number = 50;
     // has the Quiz been evaluated and scored?
-    wasEvaluated: boolean; // why not just set it here?
+    _wasEvaluated: boolean; // why not just set it here?
     isActive: boolean; // why not just set it here?
     questions: Question[]; // get the list of questions from statis data, or service/db, etc.
-    selectedQuestion: Question; // not using this at the moment
+    currentQuestion: Question; 
 	pass_percentage: number;
 	score_percentage: number;
 	passed: boolean; // did user pass the quiz?
@@ -48,21 +67,52 @@ export class Quiz {
 	ALL_QUESTIONS_AT_ONCE:  String = "All Questions At Once";
     ONE_QUESTION_AT_A_TIME: String = "One Question At A Time";
 
+
+   	currentQuestionWasAnswered(){
+		return this.getCurrentQuestion().wasAnswered(); 
+	}
+
+   	currentQuestionWasNotAnswered(){
+		return ! this.currentQuestionWasAnswered(); 
+	}
+
+	// Either check the answer or advance to the next question, depending
+	//  on the state of the quiz.
+	checkOrContinue(){
+		var q: Question = this.getCurrentQuestion();
+		if (this.weAreAtTheLastQuestion()){
+			// we are in the question-not-answered-phase, then answer it
+			q.setAnswered(true);
+		} 
+		else 
+		{
+			// move us onto the next question
+			this.question_index++;
+		}
+	}
+
+
+	// decide whether button should say 'Check (Answer)' or 'Continue (to next question)'
+	// 'or quiz' based on whether there is another question, etc.
+	getCheckOrContinue(){
+		var q: Question = this.getCurrentQuestion();
+		
+		if (q.wasAnswered()){
+			return 'Continue';
+		}
+		return 'Check';
+	}
+
+	wasEvaluated(){
+		//console.log('quiz.wasEvaluated: ' + this._wasEvaluated);
+		return this._wasEvaluated;
+	}
+
 	getQuestion(index: number = 0){
 		return this.questions[this.question_index];
 	}
 	getCurrentQuestion(){
 		return this.questions[this.question_index];
-	}
-
-	getNextQuestion(){
-		console.log("question_index: " + this.question_index);
-		console.log("question: " + this.questions[this.question_index].question);
-		console.log("\n\n");
-		//Question q = this.questions[++this.question_index];
-		//return q;
-		return "";
-		//return this.questions[++this.question_index];
 	}
 
 	/**
@@ -72,17 +122,41 @@ export class Quiz {
 		return this.questions[++this.question_index];
 	}
 
+	// are there more questions?
+	thereAreMoreQuestions(){
+		if (this.question_index < (this.questions.length - 1) ){
+			return true;
+		}
+		return false;
+	}
+
+	thereAreNoMoreQuestions(){
+		return ! this.thereAreMoreQuestions();
+	}
+
+	// are we at the last question?
+	weAreAtTheLastQuestion(){
+		if (this.question_index >= (this.questions.length - 1) ){
+			return true;
+		}
+		return false;
+	}
+
 	evaluateThisQuestion(event){
-		//alert('sup');
-			//event.stopPropagation(); // don't allow the 'eval'/enter event to be processed twice
-		if (this.question_index>= (this.questions.length - 1) ){
-			//console.log('out of questions! evaluating quiz now.');
+		//this.getCurrentQuestion
+		// if this is the last question
+		//if (this.question_index>= (this.questions.length - 1) ){
+		if (this.weAreAtTheLastQuestion()){
+			console.log('this is the last question. now what?');
+			// show the answer to this question
+			
+			// evaluate the entire quiz?
 			this.evaluate();
 		}
 		else{
-			this.nextQuestion();
-			//console.log('We are evaluating this question...' + event);
-			//event.stopPropagation();
+			console.log('this is not the last question yet...');
+			// just show the answer to this question
+			//this.nextQuestion();
 		}
 		
 		if(event){ // event not here for clicks, apparently?
@@ -91,8 +165,8 @@ export class Quiz {
 			console.log('I am preventing the default...');
 			event.preventDefault(); // don't allow the 'eval'/enter event to be processed twice
 		}
-		//return false;
 	}
+
 
 	/**
      * Grab the next question, I guess.
@@ -129,7 +203,7 @@ export class Quiz {
 		this.pass_percentage = 90; // % required to pass a quiz
 		this.score_percentage = 0; // use did not score anything yet, but we default to 0
 
-        this.wasEvaluated = false;
+        this._wasEvaluated = false;
 
         // these will eventualy come from db/service/etc. using static JSON data struct init didn't work
         // once i added a function to Question class - typescript sucks :)
@@ -153,6 +227,7 @@ export class Quiz {
         q.quiz = this;
         this.questions.push(q);
 
+		/*
         q = new Question();
         q.id = 1;
         q.question = "Is this a third question?";
@@ -160,12 +235,14 @@ export class Quiz {
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q);
+		*/
     }
  
     /**
     * Score the quiz.
     */
     evaluate(){
+		console.log('calling quiz.evaluate()...');
         //console.log('Evaluating from within Quiz object...');
         // for each question on the quiz, check if the provided answer is correct
 		var num_right: number = 0;
@@ -192,7 +269,7 @@ export class Quiz {
 			this.quiz_done_status_message = "That's ok -- plenty more where that came from.";
 		}
 	
-        this.wasEvaluated=true;
+        this._wasEvaluated=true;
 		this.isActive=false;
     }
 }
@@ -217,35 +294,54 @@ export class AppComponent {
 	focused:number = 0;
 	start: number = 50;
 
+
 	handleKeyboardEvents(event: KeyboardEvent) {
         if(event.keyCode==13){
-			console.log('we got an enter keydown...' + event.keyCode);
-
-			if(this.quiz.isActive){
-				// then why is this being called?
-				console.log('the current quiz is active');
-			}
-			else{
-				console.log('the current quiz is not active');
-        		//this.quiz.evaluateThisQuestion(event);
-				this.newQuiz();
-			}
-
-			//event.stopPropagation(); // don't allow the 'eval'/enter event to be processed twice
-
-			//return false;
-			// RED_FLAG: we need a way to know if this quiz was _just_ evaluated, or if it's at some other stage now.
-			// shiiiiiiiiit
-			//this.focusSet=false;
-
-			//if(this.quiz.wasEvaluated && (this.quiz.isActive) ){
-				//this.newQuiz();
-			//	return false;
-			//}
+			//console.log('we got an enter keydown...' + event.keyCode);
+			this.submitForm(event);
+			event.preventDefault();	
+			event.stopPropagation(); // don't handle this event again in handleKeyboardEvents()
 		}
+	}
 
-		//alert('here');
-    }
+	submitForm(event){
+		event.preventDefault();
+		event.stopPropagation();
+		if(this.quiz.isActive && this.quiz.currentQuestionWasAnswered() && 
+			this.quiz.thereAreMoreQuestions()){
+			// then why is this being called?
+			console.log('the current quiz is active');
+			this.quiz.nextQuestion();
+			this.focusSet = false;
+			console.log('we advanced to the next question');
+			console.log('focusSet: ' + this.focusSet);
+			console.log('focused: ' + this.focused);
+			this.focusThis.nativeElement.focus();
+		}
+		else if (this.quiz.isActive && this.quiz.currentQuestionWasAnswered() && 
+			this.quiz.thereAreNoMoreQuestions()){
+			// then we are done with this quiz, show the results
+			console.log('we answered a question...');
+			this.quiz.getCurrentQuestion().setAnswered(true);
+			this.quiz.isActive=false;
+			this.quiz.evaluate();
+		}
+		else if (this.quiz.isActive && this.quiz.currentQuestionWasNotAnswered()){
+			// then why is this being called?
+			this.quiz.getCurrentQuestion().setAnswered(true);
+			//console.log('just flipped this question to \'answered\'...');
+		}
+		else if ( (!this.quiz.isActive)){
+			// show the Score/Result screen
+			console.log('the quiz is not active....');
+			
+		}
+		else{
+			// take us to the next quiz
+			console.log('give us a new quiz...');
+			this.newQuiz();
+		}
+	}
 
 
     @ViewChild('focusThis') focusThis;
@@ -280,7 +376,7 @@ export class AppComponent {
 				setTimeout(() => {
 					this.focusThis.nativeElement.focus();
 					this.focusSet = true;
-					this.focused++;
+					//this.focused++;
 					//this.id++;
 				}, 1);
 		}
@@ -292,8 +388,7 @@ export class AppComponent {
 
     ngAfterViewInit(){
 		console.log('ngAfterViewInit()...');
-        //if( (!this.quiz.wasEvaluated) && (this.id == 0) ){
-        if( (!this.quiz.wasEvaluated) ){
+        if( (!this.quiz._wasEvaluated) ){
 			// this is a crazy hack b/c Angular sucks
 			setTimeout(() => {
             	this.focusThis.nativeElement.focus();
@@ -334,8 +429,5 @@ export class AppComponent {
         alert(message);
     }
         
-    onSelect(question: Question): void {
-        this.quiz.selectedQuestion = question;
-    }
 }
 
