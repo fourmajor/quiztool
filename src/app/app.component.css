@@ -4,6 +4,22 @@ h1 {
   font-size: 250%;
 }
 
+.whitetext{
+	color: #ffffff;
+}
+
+.visible {
+	visibility: visible;
+	visible: visible;
+	opacity: 1;
+}
+
+.notvisible {
+	opacity: 0;
+	visibility: hidden;
+	visible: hidden;
+}
+
 .hidden {
 	display: none;
 }
@@ -171,6 +187,7 @@ button {
 }
 
 .correct {
+	/*visibility: visible;*/
     background-color: #90EE90;
     /*fa-check-circle-o: true;*/
 }
@@ -181,6 +198,8 @@ button {
 }
 
 .answer {
+	/*visibility: hidden;*/
+	/*display: none;*/
     margin: 0px; 
     width: 100%;
     border: 0px solid lightgray;

@@ -24,7 +24,8 @@ export class Question {
   	quiz: Quiz; // include ref back to parent object, the Quiz
 
   	wasCorrect(){
-    	if (this.useranswer == this.answer){
+    	if (this.wasAnswered() && (this.useranswer == this.answer) ){
+			//console.log('the answer for this question was correct...');
         	return true;
     	}
     	return false;
@@ -39,6 +40,7 @@ export class Question {
 	}
 
 	wasAnswered(){
+		//console.log('wasAnswered: ' + this._wasAnswered);
 		return this._wasAnswered;
 	}
 
@@ -127,7 +129,11 @@ export class Quiz {
     * What should the next action be? Provide another question, or score/evaluate the quiz?
 	*/
 	nextQuestion(){
-		return this.questions[++this.question_index];
+		if (this.thereAreMoreQuestions()){
+			return this.questions[++this.question_index];
+		}
+		// set question_index to 0 I guess? issue warning? do nothing?
+		this.question_index = 0;
 	}
 
 	// are there more questions?
@@ -235,7 +241,6 @@ export class Quiz {
         q.quiz = this;
         this.questions.push(q);
 
-		/*
         q = new Question();
         q.id = 1;
         q.question = "Is this a third question?";
@@ -243,7 +248,14 @@ export class Quiz {
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q);
-		*/
+
+        q = new Question();
+        q.id = 1;
+        q.question = "Is this a fourth question?";
+        q.answer = "yes";
+        q.quizid = 1;
+        q.quiz = this;
+        this.questions.push(q);
     }
  
     /**
@@ -292,30 +304,37 @@ export class Quiz {
     templateUrl: './app.component.html',
     //template:`<h2>Hello, world</h2>` ,
     styleUrls: ['./app.component.css'],
+//	animations: [
+//		trigger('visibility', [])],
+
+//(@flyInOut.done)="animationDone($event)"
+
+
 animations: [
   trigger('visibility', [
-    state('expanded', style({opacity: 1, transform: 'translateX(0%)'})),
-    transition('void => *', [
-      style({
-        opacity: 1,
-        transform: 'translateX(-100%)' // slide in from the left
-      }),
-      animate('0s ease-in') // this means the question just pops in, no animation
+    state('expanded',  style({opacity: 1, transform: 'translateX(0%)'})),
+    state('collapsed', style({opacity: 0, transform: 'translateX(0%)'})),
+    transition('expanded  => collapsed', [ // this is all messed up; no idea how it works
+      animate('.25s', style({
+        opacity: 0.0,
+        transform: 'translateX(100%)' // slide out to the right
+      }))
     ]),
-    transition('* => *', [ // this is all messed up; no idea how it works
-      //animate('.3s 0 ease-out', style({
-      animate('.2s', style({
-        opacity: 0,
-        transform: 'translateX(200%)' // slide out to the right
+    /*transition('collapsed  => expanded', [ // this is all messed up; no idea how it works
+      animate('2.5s', style({
+        opacity: 0.5,
+        transform: 'translateX(50%)' // slide out to the right
       }))
     ])
+	*/
   ])
 ]
+
+
 })
 export class AppComponent {
 
-  	//visibility = 'shown';
-    //visibility = 'hidden';
+	question_title:string;
   	stateExpression: string; // we should raname this; it controls transitions/animations
 
 
@@ -333,52 +352,67 @@ export class AppComponent {
 
 	handleKeyboardEvents(event: KeyboardEvent) {
         if(event.keyCode==13){
-			console.log('we got an enter keydown...' + event.keyCode);
+			//console.log('we got an enter keydown...' + event.keyCode);
 			this.submitForm(event);
 			event.preventDefault();	
 			event.stopPropagation(); // don't handle this event again in handleKeyboardEvents()
 		}
 	}
 
+
+	/**
+	* This gets called twice bc Angular sucks and the '.done' callback hook gets
+	* called twice. Lame.
+	*
+	* It also gets called initially, during first layout, even when there is no transition
+	* from state to state. We want it to start in the 'expanded' state, and it does, yet
+	* the animation still happens, with this callback.
+	*/
+	questionAnimationDone(){
+		//console.log('question animation done.');
+		//if( this.quiz.thereAreNoMoreQuestions()){
+		//	alert('ok, there are no more questions. now what?');
+		//	return;
+		//}
+
+		// if the current question was not answered yet, it's prob
+		//  b/c this is being called before the question is answered
+		if ( ! this.quiz.getCurrentQuestion().wasAnswered() ){
+			// so we kind of want to skip all this, sort of?
+			this.question_title = this.quiz.getCurrentQuestion().question;
+			this.focusThis.nativeElement.focus();
+			return;
+		}
+		if (this.quiz.thereAreMoreQuestions()){
+			this.question_title = this.quiz.nextQuestion().question;
+		}
+		this.stateExpression='expanded';
+	}	
+
 	submitForm(event){
 
-		//this.stateExpression='collapsed';
-		//console.log('I just collapsed the form...wtf.');
-		//if(event) event.preventDefault();
-		//if(event) event.stopPropagation();
-		//this.stateExpression='expanded';
 		if(event) event.preventDefault();
 		if(event) event.stopPropagation();
 
 		if(this.quiz.isActive && this.quiz.currentQuestionWasAnswered() && 
 			this.quiz.thereAreMoreQuestions()){
-			// then why is this being called?
-			console.log('the current quiz is active');
-			this.stateExpression='collapsed';
-			this.quiz.nextQuestion();
-			this.focusSet = false;
-			console.log('we advanced to the next question');
-			console.log('focusSet: ' + this.focusSet);
-			console.log('focused: ' + this.focused);
+
+			this.stateExpression = 'collapsed';
 			this.focusThis.nativeElement.focus();
 		}
 		else if (this.quiz.isActive && this.quiz.currentQuestionWasAnswered() && 
 			this.quiz.thereAreNoMoreQuestions()){
-			// then we are done with this quiz, show the results
-			console.log('we answered a question...');
-			this.quiz.getCurrentQuestion().setAnswered(true);
-			this.quiz.isActive=false;
-			this.quiz.evaluate();
+			this.stateExpression = 'collapsed';
 		}
 		else if (this.quiz.isActive && this.quiz.currentQuestionWasNotAnswered()){
 			// then why is this being called?
+			console.log('setting question to \'answered\'...');
 			this.quiz.getCurrentQuestion().setAnswered(true);
-			//console.log('just flipped this question to \'answered\'...');
 		}
 		else if ( (!this.quiz.isActive)){
 			// show the Score/Result screen
 			console.log('showing the score/result screen...');
-			this.quiz.hide();
+			this.stateExpression='collapsed';
 		}
 		else{
 			// take us to the next quiz
@@ -411,15 +445,18 @@ export class AppComponent {
 
 		//console.log('ngAfterViewChecked() is being called...');
 
-		//console.log('value of focused is ' + this.focused);
+		//console.log('visibility:' + this.stateExpression);
+		//console.log('activeElement: ' + this.focusThis.nativeElement.focus()); 
+		this.focusThis.nativeElement.focus(); 
 
 		if( (! this.focusSet) && (this.focused < 10) ){
 				setTimeout(() => {
 					this.focusThis.nativeElement.focus();
 					this.focusSet = true;
+					//this.stateExpression = 'expanded';
 					//this.focused++;
 					//this.id++;
-				}, 1);
+				}, 100);
 		}
 		else{
 			//console.log('focus is set...already.');
@@ -436,27 +473,6 @@ export class AppComponent {
             	//this.id++;
     		}, 1);
         }
-
-		/*
-		if (this.quiz.wasEvaluated && (this.quiz.quiz_display_type == this.quiz.ONE_QUESTION_AT_A_TIME) ){
-			// this is a crazy hack b/c Angular sucks
-			setTimeout(() => {
-				console.log('here...');
-				//this.nextQuizButton.nativeElement.focus(); // then focus us on the 'Continue' button
-    		}, 10);
-		}
-		*/
-		
-		/*
-		if (this.quiz.wasEvaluated){
-			// this is a crazy hack b/c Angular sucks
-			setTimeout(() => {
-				console.log('focusing on continueButton...');
-				this.continueButton.nativeElement.focus(); // then focus us on the 'Continue' button
-    		}, 1000);
-		}
-		*/
-	
     }
 
     /**

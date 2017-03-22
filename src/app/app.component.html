@@ -73,14 +73,13 @@ Hello, I am the quiz results. :)
 
 <div 	class="onequestionatatime" 
 		[@visibility]="stateExpression"
-        [ngClass]="{'hidden': quiz.hidden()}"
+		(@visibility.done)="questionAnimationDone()"
+        [ngClass]="{'hidden': false}"
 		*ngIf="quiz.quiz_display_type==quiz.ONE_QUESTION_AT_A_TIME">
 
-<div class="highlight hidden">Hi, we are a "One question at at time"-type of quiz!</div>
-
-
 <div class="question" style="border: 0px solid red;">
-		<span class="questiontitle">{{quiz.getCurrentQuestion().question}}</span>
+		<!-- <span class="questiontitle">{{quiz.getCurrentQuestion().question}}</span> -->
+		<span class="questiontitle">{{question_title}}</span>
         <div class="useranswer">
         <textarea   id="useranswer" #focusThis
 					style=""
@@ -92,10 +91,9 @@ Hello, I am the quiz results. :)
         </textarea>
         </div>
 
-        <div 	[ngClass]="{'correct':quiz.getCurrentQuestion().wasCorrect(),'incorrect':!quiz.getCurrentQuestion().wasCorrect()}" 
-				class="answer" 
-				style="border: 0px solid green;"
-				[hidden]="!quiz.getCurrentQuestion().wasAnswered()">
+        <div 
+		[ngClass]="{'notvisible': !quiz.getCurrentQuestion().wasAnswered(), 'correct':quiz.getCurrentQuestion().wasCorrect(),'incorrect':!quiz.getCurrentQuestion().wasCorrect()}" 
+				class="answer" style="">
             		<i 	[ngClass]="{'fa-check-circle-o': quiz.getCurrentQuestion().wasCorrect(), 'fa-times-circle': !quiz.getCurrentQuestion().wasCorrect()}" 	
 						class="fa fa-3x" aria-hidden="true"></i>
 							{{quiz.getCurrentQuestion().answer}}
@@ -104,6 +102,8 @@ Hello, I am the quiz results. :)
 
 
 <div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">{{quiz.quiz_done_status_message}}</div>
+
+</div> 
 
 <button [ngClass]="" 
 		class="continue" 
@@ -119,7 +119,6 @@ Hello, I am the quiz results. :)
 		type="button" #nextQuizButton 
 		id="nextQuizButton">Next Quiz</button>
 
-</div> <!-- END of ALL_QUESTIONS_AT_ONCE type of quiz -->
 
 
 
