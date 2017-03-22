@@ -54,6 +54,7 @@ export class Quiz {
     // has the Quiz been evaluated and scored?
     _wasEvaluated: boolean; // why not just set it here?
     isActive: boolean; // why not just set it here?
+	_isHidden: boolean = false;
     questions: Question[]; // get the list of questions from statis data, or service/db, etc.
     currentQuestion: Question; 
 	pass_percentage: number;
@@ -67,6 +68,13 @@ export class Quiz {
 	ALL_QUESTIONS_AT_ONCE:  String = "All Questions At Once";
     ONE_QUESTION_AT_A_TIME: String = "One Question At A Time";
 
+	hidden(){
+		return this._isHidden;
+	}
+
+	hide(){
+		//this._isHidden=true;
+	}
 
    	currentQuestionWasAnswered(){
 		return this.getCurrentQuestion().wasAnswered(); 
@@ -284,9 +292,32 @@ export class Quiz {
     templateUrl: './app.component.html',
     //template:`<h2>Hello, world</h2>` ,
     styleUrls: ['./app.component.css'],
-	//changeDetection: ChangeDetectionStrategy.OnPush, // not sure if still needed; see setTimeout() hack
+animations: [
+  trigger('visibility', [
+    state('expanded', style({opacity: 1, transform: 'translateX(0%)'})),
+    transition('void => *', [
+      style({
+        opacity: 1,
+        transform: 'translateX(-100%)' // slide in from the left
+      }),
+      animate('0s ease-in') // this means the question just pops in, no animation
+    ]),
+    transition('* => *', [ // this is all messed up; no idea how it works
+      //animate('.3s 0 ease-out', style({
+      animate('.2s', style({
+        opacity: 0,
+        transform: 'translateX(200%)' // slide out to the right
+      }))
+    ])
+  ])
+]
 })
 export class AppComponent {
+
+  	//visibility = 'shown';
+    //visibility = 'hidden';
+  	stateExpression: string; // we should raname this; it controls transitions/animations
+
 
     title: String = 'Quiz Tool';
     quiz: Quiz;
@@ -294,10 +325,15 @@ export class AppComponent {
 	focused:number = 0;
 	start: number = 50;
 
+ 	constructor() {
+		this.quiz = new Quiz();
+		//this.stateExpression = 'collapsed';
+		this.stateExpression = 'expanded';
+  	}
 
 	handleKeyboardEvents(event: KeyboardEvent) {
         if(event.keyCode==13){
-			//console.log('we got an enter keydown...' + event.keyCode);
+			console.log('we got an enter keydown...' + event.keyCode);
 			this.submitForm(event);
 			event.preventDefault();	
 			event.stopPropagation(); // don't handle this event again in handleKeyboardEvents()
@@ -305,12 +341,20 @@ export class AppComponent {
 	}
 
 	submitForm(event){
-		event.preventDefault();
-		event.stopPropagation();
+
+		//this.stateExpression='collapsed';
+		//console.log('I just collapsed the form...wtf.');
+		//if(event) event.preventDefault();
+		//if(event) event.stopPropagation();
+		//this.stateExpression='expanded';
+		if(event) event.preventDefault();
+		if(event) event.stopPropagation();
+
 		if(this.quiz.isActive && this.quiz.currentQuestionWasAnswered() && 
 			this.quiz.thereAreMoreQuestions()){
 			// then why is this being called?
 			console.log('the current quiz is active');
+			this.stateExpression='collapsed';
 			this.quiz.nextQuestion();
 			this.focusSet = false;
 			console.log('we advanced to the next question');
@@ -333,8 +377,8 @@ export class AppComponent {
 		}
 		else if ( (!this.quiz.isActive)){
 			// show the Score/Result screen
-			console.log('the quiz is not active....');
-			
+			console.log('showing the score/result screen...');
+			this.quiz.hide();
 		}
 		else{
 			// take us to the next quiz
@@ -351,9 +395,6 @@ export class AppComponent {
     //O to focus
     id:number=0;
 
- 	constructor() {
-		this.quiz = new Quiz();
-  	}
 
     newQuiz() {
         this.quiz = new Quiz();
@@ -387,7 +428,7 @@ export class AppComponent {
 	}
 
     ngAfterViewInit(){
-		console.log('ngAfterViewInit()...');
+		//console.log('ngAfterViewInit()...');
         if( (!this.quiz._wasEvaluated) ){
 			// this is a crazy hack b/c Angular sucks
 			setTimeout(() => {

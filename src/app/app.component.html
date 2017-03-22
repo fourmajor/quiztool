@@ -4,10 +4,13 @@
 <div class="content">
 
 
+<h1>
+  {{title}}
+</h1>
 
 
 
-<div *ngIf="quiz.quiz_display_type==quiz.ALL_QUESTIONS_AT_ONCE">
+<div class="allquestionsatonce" *ngIf="quiz.quiz_display_type==quiz.ALL_QUESTIONS_AT_ONCE">
 <div class="highlight">Hi, we are an "ALL ?s at once"-type of quiz!</div>
 
 <h1>
@@ -62,21 +65,25 @@
 
 
 
+<div 	class="quizresults" 
+        [ngClass]="{'hidden': ! quiz.hidden()}"
+		*ngIf="quiz.quiz_display_type==quiz.ONE_QUESTION_AT_A_TIME">
+Hello, I am the quiz results. :)
+</div>
 
+<div 	class="onequestionatatime" 
+		[@visibility]="stateExpression"
+        [ngClass]="{'hidden': quiz.hidden()}"
+		*ngIf="quiz.quiz_display_type==quiz.ONE_QUESTION_AT_A_TIME">
 
-<div *ngIf="quiz.quiz_display_type==quiz.ONE_QUESTION_AT_A_TIME">
+<div class="highlight hidden">Hi, we are a "One question at at time"-type of quiz!</div>
 
-<div class="highlight">Hi, we are a "One question at at time"-type of quiz!</div>
-
-<h1>
-  {{title}}
-</h1>
 
 <div class="question" style="border: 0px solid red;">
 		<span class="questiontitle">{{quiz.getCurrentQuestion().question}}</span>
         <div class="useranswer">
         <textarea   id="useranswer" #focusThis
-					style="border: 0px solid blue;"
+					style=""
                     [(ngModel)]="quiz.getCurrentQuestion().useranswer" 
                     [disabled]="quiz.getCurrentQuestion().wasAnswered()"
    	                (keydown.enter)="submitForm($event);"
@@ -108,7 +115,7 @@
 <button [ngClass]="" 
 		class="nextquiz" 
 		[hidden]="!quiz.wasEvaluated()" 
-		(click)="newQuiz();" 
+		(click)="submitForm();" 
 		type="button" #nextQuizButton 
 		id="nextQuizButton">Next Quiz</button>
 

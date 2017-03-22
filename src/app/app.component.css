@@ -4,6 +4,13 @@ h1 {
   font-size: 250%;
 }
 
+.hidden {
+	display: none;
+}
+
+.nothidden {
+	display: block;
+}
 
 /**
  * FONT AWESOME CUSTOMIZATIONS
@@ -101,6 +108,9 @@ button {
     /*background-color: #000;*/
 }
 
+.textarea-default {
+	border: 1px solid lightgrey;
+}
 
 .textarea-default:focus{
     border-radius: 20px;
@@ -203,6 +213,7 @@ button {
 .useranswer {
 	clear: both;
     /*margin-left: 2.8em;*/
+	/*border: 1px solid lightgrey;*/
 	margin: 10px 0px 10px 0px;
 	padding: 10px 0px 0px 0px;
     font-size: 1em;
