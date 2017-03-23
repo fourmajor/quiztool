@@ -74,11 +74,9 @@ Hello, I am the quiz results. :)
 <div 	class="onequestionatatime" 
 		[@visibility]="stateExpression"
 		(@visibility.done)="questionAnimationDone()"
-        [ngClass]="{'hidden': false}"
 		*ngIf="(quiz.quiz_display_type==quiz.ONE_QUESTION_AT_A_TIME) && (!quiz.wasEvaluated())">
 
 <div class="question" style="border: 0px solid red;">
-		<!-- <span class="questiontitle">{{quiz.getCurrentQuestion().question}}</span> -->
 		<span class="questiontitle">{{question_title}}</span>
         <div class="useranswer">
         <textarea   id="useranswer" #focusThis
@@ -102,14 +100,17 @@ Hello, I am the quiz results. :)
 
 
 
-<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">{{quiz.quiz_done_status_message}}</div>
+<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">
+{{quiz.quiz_done_status_message}}
+</div>
 
 </div> 
+
 
 <div *ngIf="quiz.wasEvaluated()" class="score">
 <div><h2>Quiz Completed!</h2></div>
 <div><h3>You got {{quiz.num_right}} out of {{quiz.numberOfQuestions()}} questions correct.</h3></div>
-<div>You are on your way to becoming a master!</div>
+<div>{{quiz.results_message_details}}</div>
 </div>
 
 <button [ngClass]="" 

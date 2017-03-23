@@ -253,7 +253,7 @@ export class Quiz {
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
-        //this.questions.push(q);
+        this.questions.push(q);
 
         q = new Question();
         q.id = 1;
@@ -295,12 +295,13 @@ export class Quiz {
 		//console.log('score_percentage: ' + this.score_percentage);
 	
 		if (this.userPassed()){
-			this.quiz_done_status_message = "Great job -- you passed!";
+			//this.quiz_done_status_message = "Great job -- you passed!";
+			this.results_message_details = "Great job -- you passed!";
 		}
 		else if (this.num_right > 0){
-			this.quiz_done_status_message = "Well, you got at least one right. :) Try again!";
+			this.results_message_details = "Well, you got at least one right. :) Try again!";
 		} else {
-			this.quiz_done_status_message = "That's ok -- plenty more where that came from.";
+			this.results_message_details = "That's ok -- plenty more where that came from.";
 		}
 	
         this._wasEvaluated=true;
@@ -355,7 +356,7 @@ export class AppComponent {
 
 	handleKeyboardEvents(event: KeyboardEvent) {
         if(event.keyCode==13){
-			//console.log('we got an enter keydown...' + event.keyCode);
+			console.log('we got an enter keydown...' + event.keyCode);
 			this.submitForm(event);
 			event.preventDefault();	
 			event.stopPropagation(); // don't handle this event again in handleKeyboardEvents()
@@ -397,6 +398,7 @@ export class AppComponent {
 		this.stateExpression='expanded';
 	}	
 
+
 	submitForm(event){
 
 		if(event) event.preventDefault();
@@ -425,15 +427,20 @@ export class AppComponent {
 			console.log('setting question to \'answered\'...');
 			this.quiz.getCurrentQuestion().setAnswered(true);
 		}
+		/*
 		else if ( (!this.quiz.isActive)){
 			// show the Score/Result screen
 			console.log('showing the score/result screen...');
-			this.stateExpression='collapsed';
+			//this.stateExpression='collapsed';
+			this.newQuiz();
 		}
+		*/
 		else{
 			// take us to the next quiz
-			console.log('give us a new quiz...');
-			this.newQuiz();
+			console.log('creating a new quiz...');
+			//this.newQuiz();
+			this.quiz = new Quiz();
+			this.stateExpression = 'expanded';
 		}
 	}
 
@@ -469,20 +476,6 @@ export class AppComponent {
 		else{
 			//console.log('we do NOT want to focus on the first field, so I will not do that...');
 		}
-
-		//console.log('visibility:' + this.stateExpression);
-		//console.log('activeElement: ' + this.focusThis.nativeElement.focus()); 
-		//this.focusThis.nativeElement.focus(); 
-
-		//if( (! this.focusSet) && (this.focused < 10) ){
-//				setTimeout(() => {
-//					this.focusThis.nativeElement.focus();
-					//this.focusSet = true;
-					//this.stateExpression = 'expanded';
-					//this.focused++;
-					//this.id++;
-//				}, 1000);
-			
 	}
 
     ngAfterViewInit(){
