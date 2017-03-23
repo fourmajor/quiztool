@@ -7,6 +7,7 @@ import {
 	keyframes,
 	Output, 
 	EventEmitter, 
+	Renderer,
 	state,
 	style,
 	transition,
@@ -65,6 +66,11 @@ export class Quiz {
 	quiz_done_status_message: String;
 	quiz_display_type: String;
 	question_index: number; // which question are we currently showing? 0-indexed
+	num_right: number = 0;
+	num_wrong: number = 0;
+	results_message_header: string;
+	results_message_details: string;
+	
 
 	// doing this instead of using Enum b/c Typescript sucks
 	ALL_QUESTIONS_AT_ONCE:  String = "All Questions At Once";
@@ -247,7 +253,7 @@ export class Quiz {
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
-        this.questions.push(q);
+        //this.questions.push(q);
 
         q = new Question();
         q.id = 1;
@@ -255,9 +261,17 @@ export class Quiz {
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
-        this.questions.push(q);
+        //this.questions.push(q);
     }
  
+
+	numberOfQuestions(){
+		if(this.questions){
+	    	return this.questions.length;
+		}
+		return 0;
+	}
+
     /**
     * Score the quiz.
     */
@@ -265,25 +279,25 @@ export class Quiz {
 		console.log('calling quiz.evaluate()...');
         //console.log('Evaluating from within Quiz object...');
         // for each question on the quiz, check if the provided answer is correct
-		var num_right: number = 0;
-		var num_wrong: number = 0;
+		this.num_right = 0;
+		this.num_wrong = 0;
         for (let question of this.questions) {
             //console.log(question); // 1, "string", false
 			if ( question.wasAnsweredCorrectly() ){ 
-				++num_right; 
+				++this.num_right; 
 			} else {
-				++num_wrong; 
+				++this.num_wrong; 
 			}
         }
 	    var total_number_of_questions = this.questions.length;
 		//console.log('num questions: ' + total_number_of_questions);
-		this.score_percentage = Math.floor( (num_right/total_number_of_questions)*100 );
+		this.score_percentage = Math.floor( (this.num_right/total_number_of_questions)*100 );
 		//console.log('score_percentage: ' + this.score_percentage);
 	
 		if (this.userPassed()){
 			this.quiz_done_status_message = "Great job -- you passed!";
 		}
-		else if (num_right > 0){
+		else if (this.num_right > 0){
 			this.quiz_done_status_message = "Well, you got at least one right. :) Try again!";
 		} else {
 			this.quiz_done_status_message = "That's ok -- plenty more where that came from.";
@@ -304,11 +318,6 @@ export class Quiz {
     templateUrl: './app.component.html',
     //template:`<h2>Hello, world</h2>` ,
     styleUrls: ['./app.component.css'],
-//	animations: [
-//		trigger('visibility', [])],
-
-//(@flyInOut.done)="animationDone($event)"
-
 
 animations: [
   trigger('visibility', [
@@ -320,13 +329,6 @@ animations: [
         transform: 'translateX(100%)' // slide out to the right
       }))
     ]),
-    /*transition('collapsed  => expanded', [ // this is all messed up; no idea how it works
-      animate('2.5s', style({
-        opacity: 0.5,
-        transform: 'translateX(50%)' // slide out to the right
-      }))
-    ])
-	*/
   ])
 ]
 
@@ -337,6 +339,7 @@ export class AppComponent {
 	question_title:string;
   	stateExpression: string; // we should raname this; it controls transitions/animations
 
+	focusOnFirstField: boolean = true;
 
     title: String = 'Quiz Tool';
     quiz: Quiz;
@@ -369,18 +372,23 @@ export class AppComponent {
 	* the animation still happens, with this callback.
 	*/
 	questionAnimationDone(){
-		//console.log('question animation done.');
-		//if( this.quiz.thereAreNoMoreQuestions()){
-		//	alert('ok, there are no more questions. now what?');
-		//	return;
-		//}
+
+		this.focusOnFirstField=true;
+
+		if( this.quiz.thereAreNoMoreQuestions()){
+			console.log('ok, there are no more questions. now what?');
+			return;
+		}
+
+		if(this.focusThis) this.focusThis.nativeElement.focus();
+		if(this.focusThis) this.focusThis.nativeElement.autofocus=true;
 
 		// if the current question was not answered yet, it's prob
 		//  b/c this is being called before the question is answered
 		if ( ! this.quiz.getCurrentQuestion().wasAnswered() ){
 			// so we kind of want to skip all this, sort of?
 			this.question_title = this.quiz.getCurrentQuestion().question;
-			this.focusThis.nativeElement.focus();
+			if (this.focusThis) this.focusThis.nativeElement.focus();
 			return;
 		}
 		if (this.quiz.thereAreMoreQuestions()){
@@ -394,16 +402,24 @@ export class AppComponent {
 		if(event) event.preventDefault();
 		if(event) event.stopPropagation();
 
-		if(this.quiz.isActive && this.quiz.currentQuestionWasAnswered() && 
-			this.quiz.thereAreMoreQuestions()){
+		if(this.quiz.isActive 
+			&& this.quiz.currentQuestionWasAnswered() 
+			&& this.quiz.thereAreMoreQuestions()){
 
+			console.log('there are more questions...');
 			this.stateExpression = 'collapsed';
-			this.focusThis.nativeElement.focus();
+			if(this.focusThis) this.focusThis.nativeElement.focus();
 		}
-		else if (this.quiz.isActive && this.quiz.currentQuestionWasAnswered() && 
-			this.quiz.thereAreNoMoreQuestions()){
+		else if (this.quiz.isActive && 
+				this.quiz.currentQuestionWasAnswered() && 
+				this.quiz.thereAreNoMoreQuestions()){
+
+			console.log('there are no more questions...');
 			this.stateExpression = 'collapsed';
-		}
+
+			console.log('show the overview screen...');
+			this.quiz.evaluate();
+		}	
 		else if (this.quiz.isActive && this.quiz.currentQuestionWasNotAnswered()){
 			// then why is this being called?
 			console.log('setting question to \'answered\'...');
@@ -445,27 +461,32 @@ export class AppComponent {
 
 		//console.log('ngAfterViewChecked() is being called...');
 
+		if (this.focusOnFirstField==true){
+			//console.log('we want to focus on the first field, so i\'m going to do that...');
+			if(this.focusThis) this.focusThis.nativeElement.focus();
+			this.focusOnFirstField=false;
+		}
+		else{
+			//console.log('we do NOT want to focus on the first field, so I will not do that...');
+		}
+
 		//console.log('visibility:' + this.stateExpression);
 		//console.log('activeElement: ' + this.focusThis.nativeElement.focus()); 
-		this.focusThis.nativeElement.focus(); 
+		//this.focusThis.nativeElement.focus(); 
 
-		if( (! this.focusSet) && (this.focused < 10) ){
-				setTimeout(() => {
-					this.focusThis.nativeElement.focus();
-					this.focusSet = true;
+		//if( (! this.focusSet) && (this.focused < 10) ){
+//				setTimeout(() => {
+//					this.focusThis.nativeElement.focus();
+					//this.focusSet = true;
 					//this.stateExpression = 'expanded';
 					//this.focused++;
 					//this.id++;
-				}, 100);
-		}
-		else{
-			//console.log('focus is set...already.');
-		}
+//				}, 1000);
 			
 	}
 
     ngAfterViewInit(){
-		//console.log('ngAfterViewInit()...');
+		console.log('ngAfterViewInit()...');
         if( (!this.quiz._wasEvaluated) ){
 			// this is a crazy hack b/c Angular sucks
 			setTimeout(() => {
