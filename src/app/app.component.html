@@ -74,35 +74,14 @@ Hello, I am the quiz results. :)
 <div 	class="onequestionatatime" 
 		[@visibility]="stateExpression"
 		(@visibility.done)="questionAnimationDone()"
+		(@visibility.start)="questionAnimationStart()"
 		*ngIf="(quiz.quiz_display_type==quiz.ONE_QUESTION_AT_A_TIME) && (!quiz.wasEvaluated())">
 
-<div class="question" style="border: 0px solid red;">
-		<span class="questiontitle">{{question_title}}</span>
-        <div class="useranswer">
-        <textarea   id="useranswer" #focusThis
-					style=""
-                    [(ngModel)]="quiz.getCurrentQuestion().useranswer" 
-                    [disabled]="quiz.getCurrentQuestion().wasAnswered()"
-   	                (keydown.enter)="submitForm($event);"
-                    [ngClass]="{'disabled': quiz.getCurrentQuestion().wasAnswered()}"
-                    class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
-        </textarea>
-        </div>
+	<question [question]="quiz.getCurrentQuestion()"></question>
 
-        <div 
-		[ngClass]="{'notvisible': !quiz.getCurrentQuestion().wasAnswered(), 'correct':quiz.getCurrentQuestion().wasCorrect(),'incorrect':!quiz.getCurrentQuestion().wasCorrect()}" 
-				class="answer" style="">
-            		<i 	[ngClass]="{'fa-check-circle-o': quiz.getCurrentQuestion().wasCorrect(), 'fa-times-circle': !quiz.getCurrentQuestion().wasCorrect()}" 	
-						class="fa fa-3x" aria-hidden="true"></i>
-							{{quiz.getCurrentQuestion().answer}}
-        </div>
-</div>
-
-
-
-<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">
-{{quiz.quiz_done_status_message}}
-</div>
+	<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">
+	{{quiz.quiz_done_status_message}}
+	</div>
 
 </div> 
 

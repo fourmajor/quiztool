@@ -1,31 +1,23 @@
-import { 
-	animate,
-	ChangeDetectionStrategy, 
-	ChangeDetectorRef, 
-	Component, 
-	Input, 
-	keyframes,
-	Output, 
-	EventEmitter, 
-	Renderer,
-	state,
-	style,
-	transition,
-	trigger,
-	ViewChild } from '@angular/core';
-
+import { animate, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, keyframes, Output, EventEmitter, Renderer, state, style, transition, trigger, ViewChild } from '@angular/core'; 
+import {  QuestionComponent } from './question.component'; 
 
 export class Question {
 	id: number;
 	question: string;
+	title: string;
 	answer: string;
   	useranswer: string;
 	_wasAnswered: Boolean = false;
   	quizid: number;
   	quiz: Quiz; // include ref back to parent object, the Quiz
+	_focusSee:boolean = false;
 
   	wasCorrect(){
-    	if (this.wasAnswered() && (this.useranswer == this.answer) ){
+		// RED_FLAG -- add null checks
+    	if (this.wasAnswered() && 
+			(this.answer!='undefined') && (this.answer) &&
+			(this.useranswer!='undefined') && (this.useranswer) &&
+			(this.useranswer.toLowerCase() == this.answer.toLowerCase()) ){
 			//console.log('the answer for this question was correct...');
         	return true;
     	}
@@ -167,14 +159,14 @@ export class Quiz {
 		// if this is the last question
 		//if (this.question_index>= (this.questions.length - 1) ){
 		if (this.weAreAtTheLastQuestion()){
-			console.log('this is the last question. now what?');
+			//console.log('this is the last question. now what?');
 			// show the answer to this question
 			
 			// evaluate the entire quiz?
 			this.evaluate();
 		}
 		else{
-			console.log('this is not the last question yet...');
+			//console.log('this is not the last question yet...');
 			// just show the answer to this question
 			//this.nextQuestion();
 		}
@@ -182,7 +174,7 @@ export class Quiz {
 		if(event){ // event not here for clicks, apparently?
 			event.stopPropagation(); // don't allow the 'eval'/enter event to be processed twice
 									 // else the 'review' screen at end will be skipped
-			console.log('I am preventing the default...');
+			//console.log('I am preventing the default...');
 			event.preventDefault(); // don't allow the 'eval'/enter event to be processed twice
 		}
 	}
@@ -193,13 +185,13 @@ export class Quiz {
 	 */
 	next(){
 		if (this.question_index>= (this.questions.length - 1) ){
-			console.log('out of questions! evaluating quiz now.');
+			//console.log('out of questions! evaluating quiz now.');
 			this.evaluate();
 			this.isActive = false; // mark the quiz as 'not running'
 		} else {
-			console.log('here...');
+			//console.log('here...');
 			this.getCurrentQuestion().useranswer='';
-			console.log('...'+this.getCurrentQuestion().useranswer+'...');
+			//console.log('...'+this.getCurrentQuestion().useranswer+'...');
 			this.question_index = this.question_index + 1;
 			//console.log('...'+this.getCurrentQuestion().useranswer+'...');
 			this.getCurrentQuestion().useranswer='';
@@ -232,8 +224,9 @@ export class Quiz {
         this.questions = [];
 
         var q = new Question();
-        q.id = 1;
+        q.id = 0;
         q.question = "Should we build a great quiz tool?";
+        q.title = "Should we build a great quiz tool?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
@@ -242,22 +235,25 @@ export class Quiz {
         q = new Question();
         q.id = 1;
         q.question = "Does Donald Trump suck?";
+        q.title = "Does Donald Trump suck?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q);
 
         q = new Question();
-        q.id = 1;
+        q.id = 2;
         q.question = "Is this a third question?";
+        q.title = "Is this a third question?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
         this.questions.push(q);
 
         q = new Question();
-        q.id = 1;
+        q.id = 3;
         q.question = "Is this a fourth question?";
+        q.title = "Is this a fourth question?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
@@ -276,7 +272,7 @@ export class Quiz {
     * Score the quiz.
     */
     evaluate(){
-		console.log('calling quiz.evaluate()...');
+		//console.log('calling quiz.evaluate()...');
         //console.log('Evaluating from within Quiz object...');
         // for each question on the quiz, check if the provided answer is correct
 		this.num_right = 0;
@@ -310,16 +306,13 @@ export class Quiz {
 }
 
 @Component({
-
 	host: {
         '(document:keydown)': 'handleKeyboardEvents($event)'
     },
-
     selector: 'app-root',
     templateUrl: './app.component.html',
     //template:`<h2>Hello, world</h2>` ,
     styleUrls: ['./app.component.css'],
-
 animations: [
   trigger('visibility', [
     state('expanded',  style({opacity: 1, transform: 'translateX(0%)'})),
@@ -332,10 +325,12 @@ animations: [
     ]),
   ])
 ]
-
-
 })
 export class AppComponent {
+
+    @ViewChild('focusThis') focusThis;
+    @ViewChild('continueButton') continueButton;
+    @ViewChild('nextQuizButton') nextQuizButton;
 
 	question_title:string;
   	stateExpression: string; // we should raname this; it controls transitions/animations
@@ -344,7 +339,7 @@ export class AppComponent {
 
     title: String = 'Quiz Tool';
     quiz: Quiz;
-	focusSet:boolean = false;
+	_focusSet:boolean = false;
 	focused:number = 0;
 	start: number = 50;
 
@@ -356,10 +351,21 @@ export class AppComponent {
 
 	handleKeyboardEvents(event: KeyboardEvent) {
         if(event.keyCode==13){
-			console.log('we got an enter keydown...' + event.keyCode);
+			//console.log('we got an enter keydown...' + event.keyCode);
 			this.submitForm(event);
 			event.preventDefault();	
 			event.stopPropagation(); // don't handle this event again in handleKeyboardEvents()
+		}
+	}
+
+
+   	questionAnimationStart(){
+		if(this.focusThis && (! this._focusSet) ) {
+			//console.log('there is a focusThis element...');
+			this.focusThis.nativeElement.focus();
+			this._focusSet = true;
+		} else {
+			//console.log('there is no focusThis element...');
 		}
 	}
 
@@ -374,15 +380,28 @@ export class AppComponent {
 	*/
 	questionAnimationDone(){
 
+		//console.log('in Done()...');
+
 		this.focusOnFirstField=true;
 
 		if( this.quiz.thereAreNoMoreQuestions()){
-			console.log('ok, there are no more questions. now what?');
+			//console.log('ok, there are no more questions. now what?');
 			return;
 		}
 
-		if(this.focusThis) this.focusThis.nativeElement.focus();
-		if(this.focusThis) this.focusThis.nativeElement.autofocus=true;
+		if(this.focusThis) {
+			//console.log('there is a focusThis element...');
+			this.focusThis.nativeElement.focus();
+		} else {
+			//console.log('there is no focusThis element...');
+		}
+
+		if(this.focusThis) { 
+			//console.log('there is a focusThis element...');
+			this.focusThis.nativeElement.autofocus=true;
+		} else { 
+			//console.log('there is no focusThis element...');
+		}
 
 		// if the current question was not answered yet, it's prob
 		//  b/c this is being called before the question is answered
@@ -408,36 +427,34 @@ export class AppComponent {
 			&& this.quiz.currentQuestionWasAnswered() 
 			&& this.quiz.thereAreMoreQuestions()){
 
-			console.log('there are more questions...');
+			//console.log('there are more questions...');
 			this.stateExpression = 'collapsed';
-			if(this.focusThis) this.focusThis.nativeElement.focus();
+			if(this.focusThis) {
+				//console.log('in submitForm() there is a focusThis element...');
+				this.focusThis.nativeElement.focus();
+			}
+			else {
+				//console.log('in submitForm() there is no focusThis element...');
+			}
 		}
 		else if (this.quiz.isActive && 
 				this.quiz.currentQuestionWasAnswered() && 
 				this.quiz.thereAreNoMoreQuestions()){
 
-			console.log('there are no more questions...');
+			//console.log('there are no more questions...');
 			this.stateExpression = 'collapsed';
 
-			console.log('show the overview screen...');
+			//console.log('show the overview screen...');
 			this.quiz.evaluate();
 		}	
 		else if (this.quiz.isActive && this.quiz.currentQuestionWasNotAnswered()){
 			// then why is this being called?
-			console.log('setting question to \'answered\'...');
+			//console.log('setting question to \'answered\'...');
 			this.quiz.getCurrentQuestion().setAnswered(true);
 		}
-		/*
-		else if ( (!this.quiz.isActive)){
-			// show the Score/Result screen
-			console.log('showing the score/result screen...');
-			//this.stateExpression='collapsed';
-			this.newQuiz();
-		}
-		*/
 		else{
 			// take us to the next quiz
-			console.log('creating a new quiz...');
+			//console.log('creating a new quiz...');
 			//this.newQuiz();
 			this.quiz = new Quiz();
 			this.stateExpression = 'expanded';
@@ -445,9 +462,6 @@ export class AppComponent {
 	}
 
 
-    @ViewChild('focusThis') focusThis;
-    @ViewChild('continueButton') continueButton;
-    @ViewChild('nextQuizButton') nextQuizButton;
     
     //O to focus
     id:number=0;
@@ -456,7 +470,7 @@ export class AppComponent {
     newQuiz() {
         this.quiz = new Quiz();
 		this.quiz.isActive = true;
-		this.focusSet = false;
+		this._focusSet = false;
 		this.focused = 0;
         this.id=0
     }
@@ -479,11 +493,11 @@ export class AppComponent {
 	}
 
     ngAfterViewInit(){
-		console.log('ngAfterViewInit()...');
+		//console.log('ngAfterViewInit()...');
         if( (!this.quiz._wasEvaluated) ){
 			// this is a crazy hack b/c Angular sucks
 			setTimeout(() => {
-            	this.focusThis.nativeElement.focus();
+            	if(this.focusThis) this.focusThis.nativeElement.focus();
             	//this.id++;
     		}, 1);
         }

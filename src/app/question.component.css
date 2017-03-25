@@ -1,0 +1,315 @@
+h1 {
+  color: #369;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 250%;
+}
+
+.whitetext{
+	color: #ffffff;
+}
+
+.visible {
+	visibility: visible;
+	visible: visible;
+	opacity: 1;
+}
+
+.notvisible {
+	opacity: 0;
+	visibility: hidden;
+	visible: hidden;
+}
+
+.hidden {
+	display: none;
+}
+
+.nothidden {
+	display: block;
+}
+
+/**
+ * FONT AWESOME CUSTOMIZATIONS
+ *
+ */
+
+.fa-check-circle-o{
+    color: green;
+    margin: 10px;
+}
+
+.fa-times-circle {
+    color: red;
+    margin: 10px;
+}
+
+/* END FONT AWESOME CUSTOMIZATIONS */
+
+
+.questionlist {
+    text-align: left;
+}
+
+ol {
+    border: 0px solid red;
+    margin: 10 auto;
+	width: 100%;
+}
+
+.disabled {
+    background-color: #dcdcdc;
+}
+
+.disabled-button {
+    filter: brightness(65%);
+}
+.disabled-button:hover {
+    /*filter: brightness(100%);*/
+    cursor: not-allowed;
+}
+
+textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+    max-width: 100%;
+    resize: none; 
+    font-size: 1.5em;
+    border-radius: 20px;
+    border: 1px solid #d3d3d3; 
+    /*box-shadow: rgba(0,0,0,0.8) 0 0 10px;*/
+    /*margin: 0px;*/
+    padding: 20px;
+    /* outline: none; */
+    /*outline: 1px solid blue; */
+}
+
+.btn-right {
+    float: right;
+}
+
+/**
+ * This says to exclude the '.disabled-button' class elements when doing the hover.
+ * 
+ * That is, if an element has the 'disable-button' class, then do not apply this hover() style.
+ *
+ * This is helpful for deactivating a button after it has been submitted.
+ */
+button:not(.disabled-button):hover {
+    /*background: rgba(255,255,255,0.3);*/
+    /* background: lightgreen;*/
+    filter: brightness(115%);
+    cursor: pointer;
+}
+
+button {
+    /*background: transparent;*/
+    background: #369;
+    color: #fff;
+    font-size: 1.5em;
+    outline: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+    /*width: 50%;*/
+    min-height: 2em;
+    min-width: 8em;
+    /*height: 4em;*/
+    margin: 0em auto;
+    border: 0px solid #00AA66;
+    border-radius: 10%/50%;
+    /*text-align: right;*/
+    /*background-color: #000;*/
+}
+
+.textarea-default {
+	border: 1px solid lightgrey;
+}
+
+.textarea-default:focus{
+    border-radius: 20px;
+    outline:none;
+    /*border: 1px solid #4195fc; */
+    /*border: 1px solid #d3d3d3; */
+    /* create a BIG glow */
+   
+    box-shadow: 0px 0px 10px #369; 
+    -moz-box-shadow: 0px 0px 10px #369;
+    -webkit-box-shadow: 0px 0px 10px #369;  
+
+    /*
+    box-shadow: 0px 0px 8px #4195fc; 
+    -moz-box-shadow: 0px 0px 8px #4195fc;
+    -webkit-box-shadow: 0px 0px 8px #4195fc;  
+    */
+    
+    /*
+    box-shadow: 0px 0px 5px #d3d3d3; 
+    -moz-box-shadow: 0px 0px 5px #d3d3d3;
+    -webkit-box-shadow: 0px 0px 5px #d3d3d3;  
+    */
+}
+
+.custom-counter {
+  margin: 0 auto;
+  padding: 0;
+  list-style-type: none;
+}
+
+.custom-counter li {
+    /* counter-increment: step-counter; */
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px; 
+    width: 80%;
+    /* height: 150px; */
+    margin-bottom: 2em;
+    margin-left: 2em;
+}
+
+.custom-counter li::before {
+  /* content: counter(step-counter); */
+  margin-right: 5px;
+  font-size: 2em;
+  /* background-color: rgb(0,200,200); */
+  background-color: #73AD21;
+  color: white;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+/* A generally-green continue button */
+.continue {
+    background-color: green;
+}
+
+.correct {
+	/*visibility: visible;*/
+    background-color: #90EE90;
+    /*fa-check-circle-o: true;*/
+}
+
+.incorrect {
+    background-color: #ffcccc;
+    /*fa-times-circle: true;*/
+}
+
+.score {
+    /*margin: 0px; */
+	background-color: #90EE90; /* light cool green --> i.e. 'success' */
+	margin-bottom: 2em;
+	padding-bottom: 1em;
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 20px;
+    font-size: 1.5em;
+}
+
+.answer {
+    margin: 0px; 
+    width: 100%;
+    border: 0px solid lightgray;
+    border-radius: 20px;
+    font-size: 1.5em;
+}
+
+.quiz-done {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+	overflow: auto;
+	background-color: #0000ff; /*lightblue;*/
+	color: white;
+    /*margin: 0em; */
+    margin: 1em auto;
+	padding: 0.5em;
+    width: 80%;
+    border: 1px solid #0000ff;
+    border-radius: 20px;
+    /*margin: 1em;*/
+    /*padding-top: 1em;*/
+    /*margin-top: 2em;*/
+    font-size: 2em;
+}
+
+.useranswer {
+	clear: both;
+    /*margin-left: 2.8em;*/
+	/*border: 1px solid lightgrey;*/
+	margin: 10px 0px 10px 0px;
+	padding: 10px 0px 0px 0px;
+    font-size: 1em;
+}
+
+.questionanswer {
+	float: left;
+}
+
+.questionheader {
+	border: 0px solid red;
+	overflow: auto;
+	/*position: relative;*/
+/*
+	width: 100%;
+	margin: 10px 0px 10px 0px;
+	padding: 10px;
+*/
+}
+
+.questionnumber {
+	/*background-color: #0000ff; */
+	background: lightgreen;
+	margin: 0px 10px 0px 0px;
+	padding: 0px 10px 0px 10px;
+    border-radius: 10px;
+	float: left;
+    font-size: 2.0em;
+	/*width: 10%;*/
+    border: 1px solid lightgrey;
+}
+
+.questiontitle {
+	vertical-align: middle;
+	padding: 0px 5px 0px 0px;
+	margin: 5px 5px 5px 0px;
+	/*float: left;*/
+    font-size: 1.5em;
+    border: 0px solid lightgray;
+}
+
+.question {
+	text-align: left;
+	border: 0px solid lightgrey;
+    margin-bottom: 3em;
+}
+
+
+.centering-container {
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 25px;
+    width: 80%;
+    border: 1px solid lightgray;
+    padding: 10px;
+}
+
+.content {
+    /*text-align: left;*/
+    width: 80%;
+    margin: auto;
+    border: 0px solid red;
+    padding: 10px;
+}
+
+.highlight {
+    border-radius: 20px;
+	background: yellow;
+	margin: 0.5em;
+	padding: 0.5em;
+	font-size: 1.5em;
+}
+
+
