@@ -1,0 +1,28 @@
+<h3>MultipleChoice question type</h3>
+
+<div class="question" style="border: 0px solid red;">
+		<span class="questiontitle">{{question.title}}</span>
+        <div class="useranswer">
+        <textarea   id="useranswer" #focusThis
+					style=""
+                    [(ngModel)]="question.useranswer" 
+                    [disabled]="question.wasAnswered()"
+                    [ngClass]="{'disabled': question.wasAnswered()}"
+                    class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
+        </textarea>
+        </div>
+
+        <div 
+			[ngClass]="{'notvisible': !question.wasAnswered(), 
+					'correct':question.wasCorrect(),
+					'incorrect':!question.wasCorrect()}" 
+			class="answer" 
+			style="">
+            		<i 	[ngClass]="{'fa-check-circle-o': question.wasCorrect(), 
+									'fa-times-circle': !question.wasCorrect()}" 	
+						class="fa fa-3x" 
+						aria-hidden="true"></i>
+							{{question.answer}}
+        </div>
+</div>
+

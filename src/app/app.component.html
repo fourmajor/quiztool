@@ -77,7 +77,13 @@ Hello, I am the quiz results. :)
 		(@visibility.start)="questionAnimationStart()"
 		*ngIf="(quiz.quiz_display_type==quiz.ONE_QUESTION_AT_A_TIME) && (!quiz.wasEvaluated())">
 
-	<question [question]="quiz.getCurrentQuestion()"></question>
+
+	<question-fill-in-the-blank [question]="quiz.getCurrentQuestion()"
+		*ngIf="quiz.getCurrentQuestion()._type==='FillInTheBlank'"></question-fill-in-the-blank>
+
+	<question-multiple-choice [question]="quiz.getCurrentQuestion()"
+		*ngIf="quiz.getCurrentQuestion()._type==='MultipleChoice'"></question-multiple-choice>
+
 
 	<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">
 	{{quiz.quiz_done_status_message}}

@@ -1,20 +1,61 @@
 import { animate, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, keyframes, Output, EventEmitter, Renderer, state, style, transition, trigger, ViewChild } from '@angular/core';
 
+import { IQuestion, Question, Quiz } from './app.component';
+
 
 @Component({
-    selector: 'question',
+    selector: 'question-fill-in-the-blank',
     templateUrl: './question.component.html',
     styleUrls: ['./question.component.css'],
 	inputs: ['question']
 })
-export class QuestionComponent {
+export class QuestionComponent implements IQuestion {
 
 	focusOnFirstField:boolean = true;
 
-	@Input() question;
+    id: number;
+    title: string;
+    answer: string;
+    useranswer: string;
+    _wasAnswered: boolean = false;
+    quizid: number;
+    quiz: Quiz; // include ref back to parent object, the Quiz
+    _focusSet:boolean = false;
+    _type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
 
-	//focusIsSet: boolean = false;
-	_focusSet:boolean = false;
+    wasCorrect(){
+        // RED_FLAG -- add null checks
+        if (this.wasAnswered() &&
+            (this.answer!='undefined') && (this.answer) &&
+            (this.useranswer!='undefined') && (this.useranswer) &&
+            (this.useranswer.toLowerCase() == this.answer.toLowerCase()) ){
+            //console.log('the answer for this question was correct...');
+            return true;
+        }
+        return false;
+    }
+
+
+    setAnswered(torf:boolean){
+        this._wasAnswered = torf;
+    }
+
+    answered(){
+        this._wasAnswered = true;
+    }
+
+    wasAnswered(){
+        //console.log('from question.component: wasAnswered: ' + this._wasAnswered);
+        return this._wasAnswered;
+    }
+
+    // i kind of like this name better
+    wasAnsweredCorrectly(){
+        return this.wasCorrect();
+    }
+
+
+	//_focusSet:boolean = false;
 
 	@ViewChild('focusThis') focusThis;
 
@@ -34,7 +75,8 @@ export class QuestionComponent {
     ngAfterViewChecked(){
 
         //console.log('ngAfterViewChecked() is being called...');
-        if(this.focusThis && (! this.question._focusSet) ) {
+        /*
+		if(this.focusThis && (! this.question._focusSet) ) {
         //if(this.focusThis && (! this._focusSet) ) {
 			this.focusThis.nativeElement.focus();
             setTimeout(() => {
@@ -45,6 +87,7 @@ export class QuestionComponent {
 		else{
 			//console.log('darn.');
 		}
+		*/
 
 		/*
         if (this.focusOnFirstField==true){

@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { QuestionComponent } from './question.component';
+import { FillInTheBlankQuestionComponent } from './fill-in-the-blank-question.component';
+import { MultipleChoiceQuestionComponent } from './multiple-choice-question.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-	QuestionComponent
+	FillInTheBlankQuestionComponent,
+	MultipleChoiceQuestionComponent
   ],
   imports: [
     BrowserModule,

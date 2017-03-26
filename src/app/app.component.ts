@@ -1,16 +1,39 @@
 import { animate, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, keyframes, Output, EventEmitter, Renderer, state, style, transition, trigger, ViewChild } from '@angular/core'; 
-import {  QuestionComponent } from './question.component'; 
+import {  MultipleChoiceQuestionComponent } from './multiple-choice-question.component'; 
+import {  FillInTheBlankQuestionComponent } from './fill-in-the-blank-question.component'; 
 
-export class Question {
+
+export interface IQuestion {
+
+	// DATA MEMBERS
+    id: number;
+    //question: string;
+    title: string;
+    answer: string;
+    useranswer: string;
+    _wasAnswered: boolean;
+    quizid: number;
+    quiz: Quiz; // include ref back to parent object, the Quiz
+    _focusSet:boolean;
+    _type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
+
+	// FUNCTIONS
+	wasAnswered(): boolean;
+	wasAnsweredCorrectly(): boolean;
+	setAnswered(torf:boolean);
+}
+
+export class Question implements IQuestion {
+
 	id: number;
-	question: string;
 	title: string;
 	answer: string;
   	useranswer: string;
-	_wasAnswered: Boolean = false;
+	_wasAnswered: boolean = false;
   	quizid: number;
   	quiz: Quiz; // include ref back to parent object, the Quiz
-	_focusSee:boolean = false;
+	_focusSet:boolean = false;
+	_type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
 
   	wasCorrect(){
 		// RED_FLAG -- add null checks
@@ -24,7 +47,7 @@ export class Question {
     	return false;
     }
 
-	setAnswered(torf:Boolean){
+	setAnswered(torf:boolean){
 		this._wasAnswered = torf;
 	}
 
@@ -50,8 +73,9 @@ export class Quiz {
     _wasEvaluated: boolean; // why not just set it here?
     isActive: boolean; // why not just set it here?
 	_isHidden: boolean = false;
-    questions: Question[]; // get the list of questions from statis data, or service/db, etc.
-    currentQuestion: Question; 
+    //questions: IQuestion[]; // get the list of questions from statis data, or service/db, etc.
+    questions: IQuestion[] = [];
+    currentQuestion: IQuestion; 
 	pass_percentage: number;
 	score_percentage: number;
 	passed: boolean; // did user pass the quiz?
@@ -87,7 +111,7 @@ export class Quiz {
 	// Either check the answer or advance to the next question, depending
 	//  on the state of the quiz.
 	checkOrContinue(){
-		var q: Question = this.getCurrentQuestion();
+		var q: IQuestion = this.getCurrentQuestion();
 		if (this.weAreAtTheLastQuestion()){
 			// we are in the question-not-answered-phase, then answer it
 			q.setAnswered(true);
@@ -103,7 +127,7 @@ export class Quiz {
 	// decide whether button should say 'Check (Answer)' or 'Continue (to next question)'
 	// 'or quiz' based on whether there is another question, etc.
 	getCheckOrContinue(){
-		var q: Question = this.getCurrentQuestion();
+		var q: IQuestion = this.getCurrentQuestion();
 		
 		if (q.wasAnswered()){
 			return 'Continue';
@@ -209,55 +233,124 @@ export class Quiz {
 		this.question_index = 0;
 		this.quiz_display_type = this.ONE_QUESTION_AT_A_TIME;
 		//this.quiz_display_type = this.ALL_QUESTIONS_AT_ONCE;
-
 		this.isActive = true; // this we should prob do somewhere else...when first question is displayed...
-
 		this.pass_percentage = 90; // % required to pass a quiz
 		this.score_percentage = 0; // use did not score anything yet, but we default to 0
-
         this._wasEvaluated = false;
-
         // these will eventualy come from db/service/etc. using static JSON data struct init didn't work
         // once i added a function to Question class - typescript sucks :)
+		var jsonQuestions =	{
+				"questions": [{
+					"id": 0,
+					"title": "We should we build a great ____ tool.",
+					"answer": "quiz",
+					"quizid": 0,
+					"type"  : "FillInTheBlank"
+				}, {
+					"id": 1,
+					"title": "Does Donald Trump suck?",
+					"answer": "yes",
+					"quizid": 0,
+					"type"  : "MultipleChoice"
+				}, {
+					"id": 2,
+					"title": "Is this a third question?",
+					"answer": "yes",
+					"quizid": 0,
+					"type"  : "FillInTheBlank"
+				}]
+			};
 
-        // init new array
-        this.questions = [];
+		console.log('We are in the quiz constructor...');
 
-        var q = new Question();
+
+		// pull info from db and populate our objects/questions
+		for (let jsonQ of jsonQuestions.questions) {
+			console.log(jsonQ.type); // 1, "string", false
+			if (jsonQ.type==='FillInTheBlank'){
+				var q = <IQuestion> new FillInTheBlankQuestionComponent(); 
+				q.id = jsonQ.id;
+				q.title = jsonQ.title;
+				q.answer = jsonQ.answer;
+				q.quizid = jsonQ.quizid;
+				q._type = jsonQ.type;
+			}
+			if (jsonQ.type==='MultipleChoice'){
+				var q = <IQuestion> new MultipleChoiceQuestionComponent(); 
+				q.id = jsonQ.id;
+				q.title = jsonQ.title;
+				q.answer = jsonQ.answer;
+				q.quizid = jsonQ.quizid;
+				q._type = jsonQ.type;
+			}
+
+			// add the question to our Quiz's 'questions' array
+			this.questions.push(q); // will this blow up?
+		}
+
+
+/*
+        var q = <IQuestion> new MultipleChoiceQuestionComponent(); // or MultipleChoiceQuestionComponent, etc.
         q.id = 0;
-        q.question = "Should we build a great quiz tool?";
+        //q.question = "Should we build a great quiz tool?";
         q.title = "Should we build a great quiz tool?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
+		//q._type = Question.TYPE_FILL_IN_THE_BLANK;
+		q._type = "MultipleChoice";
+		//q._type = "FillInTheBlank";
         this.questions.push(q); // will this blow up?
 
-        q = new Question();
+console.log('the first q type is: ' + q._type);
+console.log('the title of the first question is ' + q.title);
+		q = null;
+
+
+        q = <IQuestion> new FillInTheBlankQuestionComponent();
         q.id = 1;
-        q.question = "Does Donald Trump suck?";
+        //q.question = "Does Donald Trump suck?";
         q.title = "Does Donald Trump suck?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
+		//q._type = QuestionType.MultipleChoice;
+		//q._type = Question.TYPE_MULTIPLE_CHOICE;
+		q._type = "FillInTheBlank";
         this.questions.push(q);
 
-        q = new Question();
+console.log('the second q type is: ' + q._type);
+console.log('the title of the second question is ' + q.title);
+
+
+console.log('the number of questions is ' + this.questions.length);
+*/
+
+/*
+        q = new QuestionComponent();
         q.id = 2;
-        q.question = "Is this a third question?";
+        //q.question = "Is this a third question?";
         q.title = "Is this a third question?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
-        this.questions.push(q);
+		//q._type = QuestionType.FillInTheBlank;
+		//q._type = Question.TYPE_FILL_IN_THE_BLANK;
+		q._type = "FillInTheBlankWithContext";
+        //this.questions.push(q);
 
-        q = new Question();
+        q = new QuestionComponent();
         q.id = 3;
-        q.question = "Is this a fourth question?";
+        //q.question = "Is this a fourth question?";
         q.title = "Is this a fourth question?";
         q.answer = "yes";
         q.quizid = 1;
         q.quiz = this;
+		q._type = "FillInTheBlankWithContext";
+		//q._type = QuestionType.FillInTheBlank;
         //this.questions.push(q);
+*/
+
     }
  
 
@@ -407,12 +500,12 @@ export class AppComponent {
 		//  b/c this is being called before the question is answered
 		if ( ! this.quiz.getCurrentQuestion().wasAnswered() ){
 			// so we kind of want to skip all this, sort of?
-			this.question_title = this.quiz.getCurrentQuestion().question;
+			this.question_title = this.quiz.getCurrentQuestion().title;
 			if (this.focusThis) this.focusThis.nativeElement.focus();
 			return;
 		}
 		if (this.quiz.thereAreMoreQuestions()){
-			this.question_title = this.quiz.nextQuestion().question;
+			this.question_title = this.quiz.nextQuestion().title;
 		}
 		this.stateExpression='expanded';
 	}	
