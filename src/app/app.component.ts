@@ -3,8 +3,30 @@ import {  MultipleChoiceQuestionComponent } from './multiple-choice-question.com
 import {  FillInTheBlankQuestionComponent } from './fill-in-the-blank-question.component'; 
 
 
-export interface IQuestion {
+export abstract class Question {
 
+    title: string;
+	setAnswered(torf:boolean){
+		this._wasAnswered = torf;
+	}
+
+    _useranswer: string;
+	_wasAnswered: boolean;
+
+	wasAnswered():boolean {
+		return this._wasAnswered;		
+	}
+	wasAnsweredCorrectly(): boolean{
+		return this._wasAnswered;
+	}
+	wasCorrect(): boolean{
+		return this._wasAnswered;
+	}
+}
+
+//export interface IQuestion {
+/*
+abstract class IQuestion {
 	// DATA MEMBERS
     id: number;
     //question: string;
@@ -16,14 +38,20 @@ export interface IQuestion {
     quiz: Quiz; // include ref back to parent object, the Quiz
     _focusSet:boolean;
     _type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
-
 	// FUNCTIONS
 	wasAnswered(): boolean;
 	wasAnsweredCorrectly(): boolean;
 	setAnswered(torf:boolean);
 }
+*/
 
-export class Question implements IQuestion {
+//export class Question implements IQuestion {
+export class FillInTheBlankQuestion extends Question {
+
+	constructor(){
+		super();
+		//console.log('FillInTheBlankQuestion constructor...do we have to call super()?');
+	}
 
 	id: number;
 	title: string;
@@ -66,6 +94,53 @@ export class Question implements IQuestion {
 	}
 }
 
+export class MultipleChoiceQuestionAnswer {
+	title: string; // the text of the answer itself
+	correct: boolean; // whether or not this is the correct answer to the question
+}
+
+//export class MultipleChoiceQuestion implements IQuestion {
+export class MultipleChoiceQuestion extends Question {
+
+	constructor(){
+		super();
+		//console.log('MultipleChoiceQuestion constructor...do we have to call super()?');
+	}
+
+	_answers: MultipleChoiceQuestionAnswer[]; // all the possible answers to this question
+
+	// DATA MEMBERS
+    id: number;
+    title: string;
+    answer: string;
+    useranswer: string;
+    _wasAnswered: boolean;
+    quizid: number;
+    quiz: Quiz; // include ref back to parent object, the Quiz
+    _focusSet:boolean;
+    _type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
+
+	// FUNCTIONS
+	wasAnswered(){
+		return this._wasAnswered;
+	}
+
+	wasAnsweredCorrectly(){
+		return false;
+	}
+	setAnswered(torf:boolean){
+		this._wasAnswered = torf;
+	}
+
+	getAnswers(){
+		return this._answers;
+	}
+
+	getPossibleAnswers(){
+		return this._answers;
+	}
+	
+}
 
 export class Quiz {
 	start: number = 50;
@@ -74,8 +149,8 @@ export class Quiz {
     isActive: boolean; // why not just set it here?
 	_isHidden: boolean = false;
     //questions: IQuestion[]; // get the list of questions from statis data, or service/db, etc.
-    questions: IQuestion[] = [];
-    currentQuestion: IQuestion; 
+    questions: Question[] = [];
+    currentQuestion: Question; 
 	pass_percentage: number;
 	score_percentage: number;
 	passed: boolean; // did user pass the quiz?
@@ -111,7 +186,7 @@ export class Quiz {
 	// Either check the answer or advance to the next question, depending
 	//  on the state of the quiz.
 	checkOrContinue(){
-		var q: IQuestion = this.getCurrentQuestion();
+		var q: Question = this.getCurrentQuestion();
 		if (this.weAreAtTheLastQuestion()){
 			// we are in the question-not-answered-phase, then answer it
 			q.setAnswered(true);
@@ -127,7 +202,7 @@ export class Quiz {
 	// decide whether button should say 'Check (Answer)' or 'Continue (to next question)'
 	// 'or quiz' based on whether there is another question, etc.
 	getCheckOrContinue(){
-		var q: IQuestion = this.getCurrentQuestion();
+		var q: Question = this.getCurrentQuestion();
 		
 		if (q.wasAnswered()){
 			return 'Continue';
@@ -146,6 +221,11 @@ export class Quiz {
 	getCurrentQuestion(){
 		return this.questions[this.question_index];
 	}
+	/*
+	getCurrentQuestionAsMultipleChoiceQuestion(){
+		return <MultipleChoiceQuestion> this.questions[this.question_index];
+	}
+	*/
 
 	/**
     * What should the next action be? Provide another question, or score/evaluate the quiz?
@@ -214,11 +294,11 @@ export class Quiz {
 			this.isActive = false; // mark the quiz as 'not running'
 		} else {
 			//console.log('here...');
-			this.getCurrentQuestion().useranswer='';
+			this.getCurrentQuestion()._useranswer='';
 			//console.log('...'+this.getCurrentQuestion().useranswer+'...');
 			this.question_index = this.question_index + 1;
 			//console.log('...'+this.getCurrentQuestion().useranswer+'...');
-			this.getCurrentQuestion().useranswer='';
+			this.getCurrentQuestion()._useranswer='';
 		}
 	}
 
@@ -261,14 +341,18 @@ export class Quiz {
 				}]
 			};
 
-		console.log('We are in the quiz constructor...');
+		//console.log('We are in the quiz constructor...');
 
 
 		// pull info from db and populate our objects/questions
 		for (let jsonQ of jsonQuestions.questions) {
+
+			let q = null;
+
 			console.log(jsonQ.type); // 1, "string", false
 			if (jsonQ.type==='FillInTheBlank'){
-				var q = <IQuestion> new FillInTheBlankQuestionComponent(); 
+				//var q = <IQuestion> new FillInTheBlankQuestionComponent(); 
+				q = new FillInTheBlankQuestion(); 
 				q.id = jsonQ.id;
 				q.title = jsonQ.title;
 				q.answer = jsonQ.answer;
@@ -276,7 +360,20 @@ export class Quiz {
 				q._type = jsonQ.type;
 			}
 			if (jsonQ.type==='MultipleChoice'){
-				var q = <IQuestion> new MultipleChoiceQuestionComponent(); 
+				//var q = <IQuestion> new MultipleChoiceQuestionComponent(); 
+				q = new MultipleChoiceQuestion(); 
+				// now, create 3 answers and assign them to the _answers array
+				var answer1 = new MultipleChoiceQuestionAnswer();
+				answer1.title = "Yeah.";
+				answer1.correct = false;
+				var answer2 = new MultipleChoiceQuestionAnswer();
+				answer2.title = "Definitely.";
+				answer2.correct = true;
+				var answer3 = new MultipleChoiceQuestionAnswer();
+				answer3.title = "Yep Yep Yep!";
+				answer3.correct = false;
+				q._answers = [answer1, answer2, answer3];
+
 				q.id = jsonQ.id;
 				q.title = jsonQ.title;
 				q.answer = jsonQ.answer;

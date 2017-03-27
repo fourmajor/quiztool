@@ -1,6 +1,7 @@
 import { animate, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, keyframes, Output, EventEmitter, Renderer, state, style, transition, trigger, ViewChild } from '@angular/core';
 
-import { IQuestion, Question, Quiz } from './app.component';
+//import { IQuestion, Question, Quiz } from './app.component';
+import { Question, FillInTheBlankQuestion, Quiz } from './app.component';
 
 
 @Component({
@@ -9,7 +10,8 @@ import { IQuestion, Question, Quiz } from './app.component';
     styleUrls: ['./fill-in-the-blank-question.component.css'],
 	inputs: ['question']
 })
-export class FillInTheBlankQuestionComponent implements IQuestion {
+//export class FillInTheBlankQuestionComponent implements IQuestion {
+export class FillInTheBlankQuestionComponent {
 
 	focusOnFirstField:boolean = true;
 

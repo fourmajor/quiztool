@@ -6,6 +6,8 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { FillInTheBlankQuestionComponent } from './fill-in-the-blank-question.component';
 import { MultipleChoiceQuestionComponent } from './multiple-choice-question.component';
+import { FillInTheBlankQuestion } from './app.component';
+import { MultipleChoiceQuestion } from './app.component';
 
 @NgModule({
   declarations: [
