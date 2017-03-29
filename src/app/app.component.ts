@@ -24,28 +24,6 @@ export abstract class Question {
 	}
 }
 
-//export interface IQuestion {
-/*
-abstract class IQuestion {
-	// DATA MEMBERS
-    id: number;
-    //question: string;
-    title: string;
-    answer: string;
-    useranswer: string;
-    _wasAnswered: boolean;
-    quizid: number;
-    quiz: Quiz; // include ref back to parent object, the Quiz
-    _focusSet:boolean;
-    _type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
-	// FUNCTIONS
-	wasAnswered(): boolean;
-	wasAnsweredCorrectly(): boolean;
-	setAnswered(torf:boolean);
-}
-*/
-
-//export class Question implements IQuestion {
 export class FillInTheBlankQuestion extends Question {
 
 	constructor(){
@@ -95,6 +73,7 @@ export class FillInTheBlankQuestion extends Question {
 }
 
 export class MultipleChoiceQuestionAnswer {
+	id: string; // just an id for HTML and other uses
 	title: string; // the text of the answer itself
 	correct: boolean; // whether or not this is the correct answer to the question
 }
@@ -102,8 +81,25 @@ export class MultipleChoiceQuestionAnswer {
 //export class MultipleChoiceQuestion implements IQuestion {
 export class MultipleChoiceQuestion extends Question {
 
+	_selectedAnswerId:number = null;
+
+    wasCorrect(){
+		//if( (this._selectedAnswerId!='undefined') && (this._selectedAnswerId) ){
+		if( this._selectedAnswerId!=null ){
+			// just return the 'correct' boolean of the 'selected' answer (there should be only
+			// one marked 'true'
+			if (this.getAnswerWithId( this._selectedAnswerId ).correct === true){
+				//console.log('we got this MultipleChoice question correct!');
+				return true;
+			}
+		}
+		//console.log('we got this MultipleChoice question wrong. :(');
+        return false;
+    }
+
 	constructor(){
 		super();
+		//console.log('_selectedAnswerId: ' + this._selectedAnswerId);
 		//console.log('MultipleChoiceQuestion constructor...do we have to call super()?');
 	}
 
@@ -126,10 +122,23 @@ export class MultipleChoiceQuestion extends Question {
 	}
 
 	wasAnsweredCorrectly(){
-		return false;
+		return this.wasCorrect();
 	}
 	setAnswered(torf:boolean){
 		this._wasAnswered = torf;
+	}
+
+	getAnswerWithId(arg_id){
+		//console.log('arg_id: ' + arg_id);
+		// _answers is an array of MCQAs
+		for (let answer of this._answers) {
+			//console.log('answer.id: ' + answer.id);
+			if ( answer.id === arg_id ){
+				return answer;
+			}
+		}
+		//console.log('We did not find a matching answr for this question....that should not happen. :(');
+		return null; // return last answer if none found matching...?
 	}
 
 	getAnswers(){
@@ -364,12 +373,15 @@ export class Quiz {
 				q = new MultipleChoiceQuestion(); 
 				// now, create 3 answers and assign them to the _answers array
 				var answer1 = new MultipleChoiceQuestionAnswer();
+				answer1.id = "0";
 				answer1.title = "Yeah.";
 				answer1.correct = false;
 				var answer2 = new MultipleChoiceQuestionAnswer();
+				answer2.id = "1";
 				answer2.title = "Definitely.";
 				answer2.correct = true;
 				var answer3 = new MultipleChoiceQuestionAnswer();
+				answer3.id = "2";
 				answer3.title = "Yep Yep Yep!";
 				answer3.correct = false;
 				q._answers = [answer1, answer2, answer3];
@@ -384,70 +396,6 @@ export class Quiz {
 			// add the question to our Quiz's 'questions' array
 			this.questions.push(q); // will this blow up?
 		}
-
-
-/*
-        var q = <IQuestion> new MultipleChoiceQuestionComponent(); // or MultipleChoiceQuestionComponent, etc.
-        q.id = 0;
-        //q.question = "Should we build a great quiz tool?";
-        q.title = "Should we build a great quiz tool?";
-        q.answer = "yes";
-        q.quizid = 1;
-        q.quiz = this;
-		//q._type = Question.TYPE_FILL_IN_THE_BLANK;
-		q._type = "MultipleChoice";
-		//q._type = "FillInTheBlank";
-        this.questions.push(q); // will this blow up?
-
-console.log('the first q type is: ' + q._type);
-console.log('the title of the first question is ' + q.title);
-		q = null;
-
-
-        q = <IQuestion> new FillInTheBlankQuestionComponent();
-        q.id = 1;
-        //q.question = "Does Donald Trump suck?";
-        q.title = "Does Donald Trump suck?";
-        q.answer = "yes";
-        q.quizid = 1;
-        q.quiz = this;
-		//q._type = QuestionType.MultipleChoice;
-		//q._type = Question.TYPE_MULTIPLE_CHOICE;
-		q._type = "FillInTheBlank";
-        this.questions.push(q);
-
-console.log('the second q type is: ' + q._type);
-console.log('the title of the second question is ' + q.title);
-
-
-console.log('the number of questions is ' + this.questions.length);
-*/
-
-/*
-        q = new QuestionComponent();
-        q.id = 2;
-        //q.question = "Is this a third question?";
-        q.title = "Is this a third question?";
-        q.answer = "yes";
-        q.quizid = 1;
-        q.quiz = this;
-		//q._type = QuestionType.FillInTheBlank;
-		//q._type = Question.TYPE_FILL_IN_THE_BLANK;
-		q._type = "FillInTheBlankWithContext";
-        //this.questions.push(q);
-
-        q = new QuestionComponent();
-        q.id = 3;
-        //q.question = "Is this a fourth question?";
-        q.title = "Is this a fourth question?";
-        q.answer = "yes";
-        q.quizid = 1;
-        q.quiz = this;
-		q._type = "FillInTheBlankWithContext";
-		//q._type = QuestionType.FillInTheBlank;
-        //this.questions.push(q);
-*/
-
     }
  
 
@@ -457,6 +405,7 @@ console.log('the number of questions is ' + this.questions.length);
 		}
 		return 0;
 	}
+
 
     /**
     * Score the quiz.

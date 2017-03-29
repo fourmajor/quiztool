@@ -4,17 +4,15 @@
 		<span class="questiontitle">{{question.title}}</span>
         <div class="multiplechoiceanswers">
 
-<div class="multiplechoiceanswer"  *ngFor="let answer of question.getAnswers();">{{answer.title}}</div>
+			<div
+				id="{{answer.id}}"
+				*ngFor="let answer of question.getAnswers();"
+			 	class="multiplechoiceanswer" 
+			 	(click)="selectOnlyThisAnswer($event)"
+				>
+				{{answer.title}}
+			</div>
 
-<!--
-        <textarea   id="useranswer" #focusThis
-					style=""
-                    [(ngModel)]="question.useranswer" 
-                    [disabled]="question.wasAnswered()"
-                    [ngClass]="{'disabled': question.wasAnswered()}"
-                    class="textarea-default" rows="2" cols="80" placeholder="Type answer here please...">
-        </textarea>
--->
         </div>
 
         <div 
