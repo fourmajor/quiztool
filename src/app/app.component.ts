@@ -1,6 +1,8 @@
 import { animate, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, keyframes, Output, EventEmitter, Renderer, state, style, transition, trigger, ViewChild } from '@angular/core'; 
-import {  MultipleChoiceQuestionComponent } from './multiple-choice-question.component'; 
+
 import {  FillInTheBlankQuestionComponent } from './fill-in-the-blank-question.component'; 
+import {  MultipleChoiceQuestionComponent } from './multiple-choice-question.component'; 
+import {  VerbConjugationQuestionComponent } from './verb-conjugation-question.component'; 
 
 
 export abstract class Question {
@@ -21,6 +23,70 @@ export abstract class Question {
 	}
 	wasCorrect(): boolean{
 		return this._wasAnswered;
+	}
+}
+
+
+export class VerbConjugationQuestion extends Question {
+
+	constructor(){
+		super();
+		console.log('VerbConjugationQuestion constructor...');
+	}
+
+	//getConjugations(){
+	//}
+
+	id: number;
+	title: string;
+	answer: string;
+  	useranswer: string;
+	_wasAnswered: boolean = false;
+  	quizid: number;
+  	quiz: Quiz; // include ref back to parent object, the Quiz
+	_focusSet:boolean = false;
+	_type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
+
+	_verb:string;
+	_verb_english:string;
+	_verb_meaning:string;
+
+	// the five uses (we are not doing vosotros for now)
+	_yo:string;
+	_tu:string;
+	_el_ella_usted:string;
+	_vosotros:string;
+	_nosotros:string;
+	_ellos_ellas_ustedes:string;
+
+  	wasCorrect(){
+		// RED_FLAG -- add null checks
+    	if (this.wasAnswered() && 
+			(this.answer!='undefined') && (this.answer) &&
+			(this.useranswer!='undefined') && (this.useranswer) &&
+			(this.useranswer.toLowerCase() == this.answer.toLowerCase()) ){
+			//console.log('the answer for this question was correct...');
+        	return true;
+    	}
+    	return false;
+    }
+
+	setAnswered(torf:boolean){
+		this._wasAnswered = torf;
+	}
+
+	answered(){
+		this._wasAnswered = true;
+	}
+
+	wasAnswered(){
+		//console.log('wasAnswered: ' + this._wasAnswered);
+		return this._wasAnswered;
+	}
+
+	// i kind of like this name better
+	wasAnsweredCorrectly(){
+		return this.wasCorrect();
 	}
 }
 
@@ -331,10 +397,10 @@ export class Quiz {
 		var jsonQuestions =	{
 				"questions": [{
 					"id": 0,
-					"title": "We should we build a great ____ tool.",
+					"title": "Conjugate this verb:",
 					"answer": "quiz",
 					"quizid": 0,
-					"type"  : "FillInTheBlank"
+					"type"  : "VerbConjugation"
 				}, {
 					"id": 1,
 					"title": "Does Donald Trump suck?",
@@ -350,16 +416,16 @@ export class Quiz {
 				}]
 			};
 
-		//console.log('We are in the quiz constructor...');
-
-
 		// pull info from db and populate our objects/questions
 		for (let jsonQ of jsonQuestions.questions) {
 
 			let q = null;
 
 			console.log(jsonQ.type); // 1, "string", false
-			if (jsonQ.type==='FillInTheBlank'){
+			if (jsonQ.type==='VerbConjugation'){
+				q = this.createNewVerbConjugationQuestion(jsonQ);
+			}
+			else if (jsonQ.type==='FillInTheBlank'){
 				//var q = <IQuestion> new FillInTheBlankQuestionComponent(); 
 				q = new FillInTheBlankQuestion(); 
 				q.id = jsonQ.id;
@@ -368,7 +434,7 @@ export class Quiz {
 				q.quizid = jsonQ.quizid;
 				q._type = jsonQ.type;
 			}
-			if (jsonQ.type==='MultipleChoice'){
+			else if (jsonQ.type==='MultipleChoice'){
 				//var q = <IQuestion> new MultipleChoiceQuestionComponent(); 
 				q = new MultipleChoiceQuestion(); 
 				// now, create 3 answers and assign them to the _answers array
@@ -392,12 +458,44 @@ export class Quiz {
 				q.quizid = jsonQ.quizid;
 				q._type = jsonQ.type;
 			}
+			else{
+				console.log('ERROR: The question type is not a known type: ' + jsonQ.type);
+				q = this.createNewVerbConjugationQuestion(jsonQ);
+			}
 
 			// add the question to our Quiz's 'questions' array
 			this.questions.push(q); // will this blow up?
 		}
     }
  
+
+	//createNewVerbConjugationQuestion(jsonQuestion:Any){
+	createNewVerbConjugationQuestion(jsonQuestion){
+
+		let jsonQ = jsonQuestion;
+
+		let q = new VerbConjugationQuestion(); 
+
+		q.id = jsonQ.id;
+		q.title = jsonQ.title;
+		q.answer = jsonQ.answer;
+		q.quizid = jsonQ.quizid;
+		q._type = jsonQ.type;
+
+		q._verb = 'tomar';
+		q._verb_english = 'to take; to drink';
+
+		// the five uses (we are not doing vosotros for now)
+		q._yo = 'tomo';
+		q._tu = 'tomas';
+		q._el_ella_usted = 'toma';
+		q._nosotros = 'tomamos';
+		q._vosotros = 'tomais';
+		q._ellos_ellas_ustedes = 'toman';
+
+		return q;
+
+	}
 
 	numberOfQuestions(){
 		if(this.questions){

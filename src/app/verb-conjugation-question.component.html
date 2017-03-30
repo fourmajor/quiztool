@@ -1,0 +1,61 @@
+<h3>Verb Conjugation question type</h3>
+
+<div class="question" style="border: 0px solid red;">
+		<span class="questiontitle">{{question.title}}</span>
+
+<div class="verb"> {{question._verb}}</div>
+
+<div class="wrapper">
+    <div id="colone">
+    
+    <div class="right">
+    yo <input class="conjugation-input">
+    </div>
+    
+    <div class="right">
+    tu <input class="conjugation-input">
+    </div>
+
+    <div class="right">
+    el/ella/usted <input class="conjugation-input">
+    </div>
+    
+    </div>
+    
+    <div id="coltwo">
+
+    <div class="right">
+    nosotros <input class="conjugation-input">
+    </div>
+    
+    <div>
+    &nbsp;
+    </div>
+
+    <div class="right">
+    ellos/ellas/usds. <input class="conjugation-input">
+    </div>
+    </div>
+</div>
+			<div
+				id="{{answer.id}}"
+				*ngFor=""
+			 	class="multiplechoiceanswer" 
+				>
+				{{answer.title}}
+			</div>
+
+        <div 
+			[ngClass]="{'notvisible': !question.wasAnswered(), 
+					'correct':question.wasCorrect(),
+					'incorrect':!question.wasCorrect()}" 
+			class="answer" 
+			style="">
+            		<i 	[ngClass]="{'fa-check-circle-o': question.wasCorrect(), 
+									'fa-times-circle': !question.wasCorrect()}" 	
+						class="fa fa-3x" 
+						aria-hidden="true"></i>
+							{{question.answer}}
+        </div>
+</div>
+

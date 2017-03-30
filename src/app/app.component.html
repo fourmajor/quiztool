@@ -84,6 +84,8 @@ Hello, I am the quiz results. :)
 	<question-multiple-choice [question]="quiz.getCurrentQuestion()"
 		*ngIf="quiz.getCurrentQuestion()._type==='MultipleChoice'"></question-multiple-choice>
 
+	<question-verb-conjugation [question]="quiz.getCurrentQuestion()"
+		*ngIf="quiz.getCurrentQuestion()._type==='VerbConjugation'"></question-verb-conjugation>
 
 	<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">
 	{{quiz.quiz_done_status_message}}

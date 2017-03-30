@@ -4,16 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+
 import { FillInTheBlankQuestionComponent } from './fill-in-the-blank-question.component';
 import { MultipleChoiceQuestionComponent } from './multiple-choice-question.component';
+import { VerbConjugationQuestionComponent } from './verb-conjugation-question.component';
+
 import { FillInTheBlankQuestion } from './app.component';
 import { MultipleChoiceQuestion } from './app.component';
+import { VerbConjugationQuestion } from './app.component';
 
 @NgModule({
   declarations: [
     AppComponent,
 	FillInTheBlankQuestionComponent,
-	MultipleChoiceQuestionComponent
+	MultipleChoiceQuestionComponent,
+	VerbConjugationQuestionComponent
   ],
   imports: [
     BrowserModule,
