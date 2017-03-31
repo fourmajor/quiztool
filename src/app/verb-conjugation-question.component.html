@@ -3,44 +3,82 @@
 <div class="question" style="border: 0px solid red;">
 		<span class="questiontitle">{{question.title}}</span>
 
-<div class="verb"> {{question._verb}}</div>
+<div class="verb glow"> {{question._verb}}</div>
+
+
 
 <div class="wrapper">
+
+<!-- <div class="conjugations-container" style="margin:0px auto;"> -->
+<div class="conjugations-container">
     <div id="colone">
     
-    <div class="right">
-    yo <input class="conjugation-input">
-    </div>
-    
-    <div class="right">
-    tu <input class="conjugation-input">
-    </div>
+		<div class="pronoun">
+		yo <input  	[disabled]="question.wasAnswered()" 
+					[(ngModel)]="question._useranswer_yo" 	
+					[ngClass]="{'disabled': question.wasAnswered()}"
+					class="conjugation-input" #focusThis>
+			<span class="tooltip" 
+					[ngClass]="{'hidden': question.hideTooltextForThisParticularConjugation('yo')}"> 
+					{{question._answer_yo}} </span>
+		</div>
+		
+		<div class="pronoun">
+		tu <input [disabled]="question.wasAnswered()" 
+					[(ngModel)]="question._useranswer_tu" 
+					[ngClass]="{'disabled': question.wasAnswered()}"
+					class="conjugation-input">
+			<span class="tooltip" 
+					[ngClass]="{'hidden': question.hideTooltextForThisParticularConjugation('tu')}"> 
+					{{question._answer_tu}} </span>
+		</div>
 
-    <div class="right">
-    el/ella/usted <input class="conjugation-input">
-    </div>
+		<div class="pronoun">
+		el/ella/usted <input [disabled]="question.wasAnswered()" 
+					[(ngModel)]="question._useranswer_el_ella_usted" 
+					[ngClass]="{'disabled': question.wasAnswered()}"
+					class="conjugation-input">
+			<span class="tooltip" 
+					[ngClass]="{'hidden': question.hideTooltextForThisParticularConjugation('el_ella_usted')}"> 
+					{{question._answer_el_ella_usted}} </span>
+		</div>
     
     </div>
     
     <div id="coltwo">
 
-    <div class="right">
-    nosotros <input class="conjugation-input">
-    </div>
-    
-    <div>
-    &nbsp;
-    </div>
+		<div class="pronoun">
+		nosotros <input [disabled]="question.wasAnswered()" 
+						[(ngModel)]="question._useranswer_nosotros" 
+						[ngClass]="{'disabled': question.wasAnswered()}"
+						class="conjugation-input">
+			<span class="tooltip" 
+					[ngClass]="{'hidden': question.hideTooltextForThisParticularConjugation('nosotros')}"> 
+					{{question._answer_nosotros}} </span>
+		</div>
+		
+		<div>
+		&nbsp;
+		</div>
 
-    <div class="right">
-    ellos/ellas/usds. <input class="conjugation-input">
-    </div>
+		<div class="pronoun">
+		ellos/ellas/uds.&nbsp;<input [disabled]="question.wasAnswered()" 
+							[(ngModel)]="question._useranswer_ellos_ellas_ustedes" 
+							[ngClass]="{'disabled': question.wasAnswered()}"
+							class="conjugation-input">
+			<span class="tooltip" 
+					[ngClass]="{'hidden': question.hideTooltextForThisParticularConjugation('ellos_ellas_ustedes')}"> 
+					{{question._answer_ellos_ellas_ustedes}} </span>
+		</div>
+
     </div>
 </div>
+
+</div><!-- END WRAPPER -->
 			<div
 				id="{{answer.id}}"
 				*ngFor=""
-			 	class="multiplechoiceanswer" 
+			 	class="answer" 
 				>
 				{{answer.title}}
 			</div>
@@ -49,13 +87,13 @@
 			[ngClass]="{'notvisible': !question.wasAnswered(), 
 					'correct':question.wasCorrect(),
 					'incorrect':!question.wasCorrect()}" 
-			class="answer" 
-			style="">
+			class="answer">
             		<i 	[ngClass]="{'fa-check-circle-o': question.wasCorrect(), 
 									'fa-times-circle': !question.wasCorrect()}" 	
-						class="fa fa-3x" 
+						class="fa fa-2x fa-pull-left" 
+						style="vertical-align: top;"
 						aria-hidden="true"></i>
-							{{question.answer}}
+							<div style="display:inline;border:0px solid green;">{{question.getAnswer()}}</div>
         </div>
 </div>
 

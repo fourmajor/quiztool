@@ -29,13 +29,14 @@ export abstract class Question {
 
 export class VerbConjugationQuestion extends Question {
 
+
+	_answer_details:string = 'This is a regular verb. It ends with \'-ar\' so can be conjugated' +
+								' with the normal verb endings.';
+
 	constructor(){
 		super();
 		console.log('VerbConjugationQuestion constructor...');
 	}
-
-	//getConjugations(){
-	//}
 
 	id: number;
 	title: string;
@@ -52,31 +53,73 @@ export class VerbConjugationQuestion extends Question {
 	_verb_meaning:string;
 
 	// the five uses (we are not doing vosotros for now)
-	_yo:string;
-	_tu:string;
-	_el_ella_usted:string;
-	_vosotros:string;
-	_nosotros:string;
-	_ellos_ellas_ustedes:string;
+	_answer_yo:string;
+	_answer_tu:string;
+	_answer_el_ella_usted:string;
+	_answer_vosotros:string;
+	_answer_nosotros:string;
+	_answer_ellos_ellas_ustedes:string;
+
+	// the five user-supplied answers (bound using ngFor two-way binding)
+	_useranswer_yo:string;
+	_useranswer_tu:string;
+	_useranswer_el_ella_usted:string;
+	_useranswer_vosotros:string;
+	_useranswer_nosotros:string;
+	_useranswer_ellos_ellas_ustedes:string;
+
+
+	wasCorrectYo(){
+		return (this._useranswer_yo === this._answer_yo);
+	}
+	wasCorrectTu(){
+		return (this._useranswer_tu === this._answer_tu);
+	}
+	wasCorrectElEllaUsted(){
+		return (this._useranswer_el_ella_usted === this._answer_el_ella_usted);
+	}
+	wasCorrectNosotros(){
+		return (this._useranswer_nosotros === this._answer_nosotros);
+	}
+	wasCorrectEllosEllasUstedes(){
+		return (this._useranswer_ellos_ellas_ustedes === this._answer_ellos_ellas_ustedes);
+	}
+
+	hideTooltextForThisParticularConjugation(pronoun:string){
+		// if question is not even answered, then def hide the tooltext (correction)
+		if ( ! this._wasAnswered ) return true;
+
+		if(pronoun==='yo') 
+			return this.wasCorrectYo();
+		if(pronoun==='tu') 
+			return this.wasCorrectTu();
+		if(pronoun==='el_ella_usted') 
+			return this.wasCorrectElEllaUsted();
+		if(pronoun==='nosotros') 
+			return this.wasCorrectNosotros();
+		if(pronoun==='ellos_ellas_ustedes') 
+			return this.wasCorrectEllosEllasUstedes();
+
+		return true; // always hide by default
+	}
 
   	wasCorrect(){
-		// RED_FLAG -- add null checks
-    	if (this.wasAnswered() && 
-			(this.answer!='undefined') && (this.answer) &&
-			(this.useranswer!='undefined') && (this.useranswer) &&
-			(this.useranswer.toLowerCase() == this.answer.toLowerCase()) ){
-			//console.log('the answer for this question was correct...');
-        	return true;
-    	}
-    	return false;
+		// prereq
+		if (! this.wasAnswered() ){ return false; }
+		return 	this.wasCorrectYo() &&
+			this.wasCorrectTu() &&
+			this.wasCorrectElEllaUsted() &&
+			this.wasCorrectNosotros() &&
+			this.wasCorrectEllosEllasUstedes();
     }
+
 
 	setAnswered(torf:boolean){
 		this._wasAnswered = torf;
 	}
 
 	answered(){
-		this._wasAnswered = true;
+		this._wasAnswered = false;
 	}
 
 	wasAnswered(){
@@ -84,10 +127,30 @@ export class VerbConjugationQuestion extends Question {
 		return this._wasAnswered;
 	}
 
+	wasNotAnswered(){
+		//console.log('wasAnswered: ' + this._wasAnswered);
+		return ! this._wasAnswered;
+	}
+
 	// i kind of like this name better
 	wasAnsweredCorrectly(){
-		return this.wasCorrect();
+		return this.wasAnswered() && this.wasCorrect();
 	}
+
+	wasAnsweredIncorrectly():boolean{
+		console.log('wasAnswered(): ' + this.wasAnswered());
+		console.log('wasIncorrect():' + ! this.wasCorrect());
+		//console.log('result: ' + this.wasAnswered() && (! this.wasCorrect()));
+		console.log('result: ' + (false && true));
+		//return this.wasAnswered() && (! this.wasCorrect());
+		//return (false && true);
+		return false;
+	}
+
+	getAnswer():string{
+		return this._answer_details;
+	}
+
 }
 
 export class FillInTheBlankQuestion extends Question {
@@ -486,12 +549,12 @@ export class Quiz {
 		q._verb_english = 'to take; to drink';
 
 		// the five uses (we are not doing vosotros for now)
-		q._yo = 'tomo';
-		q._tu = 'tomas';
-		q._el_ella_usted = 'toma';
-		q._nosotros = 'tomamos';
-		q._vosotros = 'tomais';
-		q._ellos_ellas_ustedes = 'toman';
+		q._answer_yo = 'tomo';
+		q._answer_tu = 'tomas';
+		q._answer_el_ella_usted = 'toma';
+		q._answer_nosotros = 'tomamos';
+		q._answer_vosotros = 'tomais';
+		q._answer_ellos_ellas_ustedes = 'toman';
 
 		return q;
 
