@@ -29,14 +29,16 @@ export abstract class Question {
 
 export class VerbConjugationQuestion extends Question {
 
+	// all the possible verb tenses (only 5 important ones for now)
+	// RED_FLAG -> would prefer an object like TENSE.PRESENT, TENSE.PAST, TENSE.PRESENT_PROGRESSIVE, etc.
 	static readonly TENSE_PRESENT: 				string = "Present";
 	static readonly TENSE_PAST: 				string = "Past";
 	static readonly TENSE_PRESENT_PROGRESSIVE: 	string = "Present Progressive";
 	static readonly TENSE_PAST_PROGRESSIVE: 	string = "Past Progressive";
 	static readonly TENSE_FUTURE: 				string = "Future";
 
-	answerVerbType(){
-		console.log(this._verb_type);
+	answerVerbType():string{
+		//console.log(this._verb_type);
 		if (this._verb_type === 'regular')
 			return 'a regular';
 		return 'an irregular';
@@ -44,7 +46,7 @@ export class VerbConjugationQuestion extends Question {
 
 	constructor(){
 		super();
-		console.log('VerbConjugationQuestion constructor...');
+		//console.log('VerbConjugationQuestion constructor...');
 	}
 
 	id: number;
@@ -477,7 +479,8 @@ export class Quiz {
 					"title": "Conjugate this verb in the ",
 					"answer": "quiz",
 					"quizid": 0,
-					"type"  : "VerbConjugation"
+					"type"  : "VerbConjugation",
+					"tense" : "Past"
 				}, {
 					"id": 1,
 					"title": "Does Donald Trump suck?",
@@ -490,6 +493,13 @@ export class Quiz {
 					"answer": "yes",
 					"quizid": 0,
 					"type"  : "FillInTheBlank"
+				}, {
+					"id": 3,
+					"title": "Conjugate this verb in the ",
+					"answer": "quiz",
+					"quizid": 0,
+					"type"  : "VerbConjugation",
+					"tense" : "Present"
 				}]
 			};
 
@@ -498,7 +508,7 @@ export class Quiz {
 
 			let q = null;
 
-			console.log(jsonQ.type); // 1, "string", false
+			//console.log(jsonQ.type); // 1, "string", false
 			if (jsonQ.type==='VerbConjugation'){
 				q = this.createNewVerbConjugationQuestion(jsonQ);
 			}
@@ -560,18 +570,34 @@ export class Quiz {
 		q._verb = 'tomar';
 		q._verb_english = 'to take; to drink';
 		q._verb_type = 'regular';
-		q._verb_tense = VerbConjugationQuestion.TENSE_PRESENT; // this needs to be runtime value in db/etc.
 
-		q.title = 'Conjugate this verb in the ' + q._verb_tense + ' tense:';
 
 		// the five uses (we are not doing vosotros for now)
-		q._answer_yo = 'tomo';
-		q._answer_tu = 'tomas';
-		q._answer_el_ella_usted = 'toma';
-		q._answer_nosotros = 'tomamos';
-		q._answer_vosotros = 'tomais';
-		q._answer_ellos_ellas_ustedes = 'toman';
-
+		if (jsonQ.tense === 'Present'){
+			console.log('I am present...');
+			q._answer_yo = 'tomo';
+			q._answer_tu = 'tomas';
+			q._answer_el_ella_usted = 'toma';
+			q._answer_nosotros = 'tomamos';
+			q._answer_vosotros = 'tomais';
+			q._answer_ellos_ellas_ustedes = 'toman';
+			q._verb_tense = VerbConjugationQuestion.TENSE_PRESENT; // this needs to be runtime value in db/etc.
+		}
+		else if (jsonQ.tense === 'Past' ) {
+			console.log('I am past...');
+			q._answer_yo = 'tome';
+			q._answer_tu = 'tomaste';
+			q._answer_el_ella_usted = 'tomo';
+			q._answer_nosotros = 'tomamos';
+			q._answer_vosotros = '';
+			q._answer_ellos_ellas_ustedes = 'tomaron';
+			q._verb_tense = VerbConjugationQuestion.TENSE_PAST; // this needs to be runtime value in db/etc.
+		}
+		else {
+			console.log('We got an invalid tense type: ' + jsonQ._tense);
+		}
+		// RED_FLAG: I think I'm doing something wrong here w/ this verb tense...runtime value is hard to set.
+		q.title = 'Conjugate this verb in the ' + q._verb_tense + ' tense:';
 		return q;
 
 	}
