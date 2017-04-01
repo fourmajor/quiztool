@@ -30,8 +30,13 @@ export abstract class Question {
 export class VerbConjugationQuestion extends Question {
 
 
-	_answer_details:string = 'This is a regular verb. It ends with \'-ar\' so can be conjugated' +
-								' with the normal verb endings.';
+
+	answerVerbType(){
+		console.log(this._verb_type);
+		if (this._verb_type === 'regular')
+			return 'a regular';
+		return 'an irregular';
+	}
 
 	constructor(){
 		super();
@@ -51,6 +56,8 @@ export class VerbConjugationQuestion extends Question {
 	_verb:string;
 	_verb_english:string;
 	_verb_meaning:string;
+	_verb_type:string; // 'regular' or 'irregular'
+
 
 	// the five uses (we are not doing vosotros for now)
 	_answer_yo:string;
@@ -148,7 +155,9 @@ export class VerbConjugationQuestion extends Question {
 	}
 
 	getAnswer():string{
-		return this._answer_details;
+		return 'This is ' + this.answerVerbType() + ' verb. It ends with \'-ar\' so can be conjugated' +
+			   ' with the normal verb endings.';
+		//return this._answer_details;
 	}
 
 }
@@ -532,7 +541,6 @@ export class Quiz {
     }
  
 
-	//createNewVerbConjugationQuestion(jsonQuestion:Any){
 	createNewVerbConjugationQuestion(jsonQuestion){
 
 		let jsonQ = jsonQuestion;
@@ -547,6 +555,7 @@ export class Quiz {
 
 		q._verb = 'tomar';
 		q._verb_english = 'to take; to drink';
+		q._verb_type = 'regular';
 
 		// the five uses (we are not doing vosotros for now)
 		q._answer_yo = 'tomo';

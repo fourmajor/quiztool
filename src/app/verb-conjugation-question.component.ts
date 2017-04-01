@@ -3,54 +3,6 @@ import { animate, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, 
 //import { IQuestion, Question, Quiz } from './app.component';
 import { Question, VerbConjugationQuestion, Quiz } from './app.component';
 
-var serializeEvent = function(e) {
-  if (e) {
-    var o = {
-      eventName: e.toString(),
-      altKey: e.altKey,
-      bubbles: e.bubbles,
-      button: e.button,
-      buttons: e.buttons,
-      cancelBubble: e.cancelBubble,
-      cancelable: e.cancelable,
-      clientX: e.clientX,
-      clientY: e.clientY,
-      composed: e.composed,
-      ctrlKey: e.ctrlKey,
-      currentTarget: e.currentTarget ? e.currentTarget.outerHTML : null,
-      defaultPrevented: e.defaultPrevented,
-      detail: e.detail,
-      eventPhase: e.eventPhase,
-      fromElement: e.fromElement ? e.fromElement.outerHTML : null,
-      isTrusted: e.isTrusted,
-      layerX: e.layerX,
-      layerY: e.layerY,
-      metaKey: e.metaKey,
-      movementX: e.movementX,
-      movementY: e.movementY,
-      offsetX: e.offsetX,
-      offsetY: e.offsetY,
-      pageX: e.pageX,
-      pageY: e.pageY,
-      /*path: pathToSelector(e.path && e.path.length ? e.path[0] : null),*/
-      relatedTarget: e.relatedTarget ? e.relatedTarget.outerHTML : null,
-      returnValue: e.returnValue,
-      screenX: e.screenX,
-      screenY: e.screenY,
-      shiftKey: e.shiftKey,
-      sourceCapabilities: e.sourceCapabilities ? e.sourceCapabilities.toString() : null,
-      target: e.target ? e.target.outerHTML : null,
-      timeStamp: e.timeStamp,
-      toElement: e.toElement ? e.toElement.outerHTML : null,
-      type: e.type,
-      view: e.view ? e.view.toString() : null,
-      which: e.which,
-      x: e.x,
-      y: e.y
-    };
-  };
-}
-
 @Component({
     selector: 'question-verb-conjugation',
     templateUrl: './verb-conjugation-question.component.html',
@@ -58,7 +10,6 @@ var serializeEvent = function(e) {
 	inputs: ['question']
 })
 export class VerbConjugationQuestionComponent extends Question {
-
 
 	// passing a question object to a question component is just beyond weird/stupid, but
 	// it's what Angular seems to want. 
