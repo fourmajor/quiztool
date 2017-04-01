@@ -29,7 +29,11 @@ export abstract class Question {
 
 export class VerbConjugationQuestion extends Question {
 
-
+	static readonly TENSE_PRESENT: 				string = "Present";
+	static readonly TENSE_PAST: 				string = "Past";
+	static readonly TENSE_PRESENT_PROGRESSIVE: 	string = "Present Progressive";
+	static readonly TENSE_PAST_PROGRESSIVE: 	string = "Past Progressive";
+	static readonly TENSE_FUTURE: 				string = "Future";
 
 	answerVerbType(){
 		console.log(this._verb_type);
@@ -57,6 +61,7 @@ export class VerbConjugationQuestion extends Question {
 	_verb_english:string;
 	_verb_meaning:string;
 	_verb_type:string; // 'regular' or 'irregular'
+	_verb_tense:string; // present, past, present progressive, past progressive, future
 
 
 	// the five uses (we are not doing vosotros for now)
@@ -469,7 +474,7 @@ export class Quiz {
 		var jsonQuestions =	{
 				"questions": [{
 					"id": 0,
-					"title": "Conjugate this verb:",
+					"title": "Conjugate this verb in the ",
 					"answer": "quiz",
 					"quizid": 0,
 					"type"  : "VerbConjugation"
@@ -548,7 +553,6 @@ export class Quiz {
 		let q = new VerbConjugationQuestion(); 
 
 		q.id = jsonQ.id;
-		q.title = jsonQ.title;
 		q.answer = jsonQ.answer;
 		q.quizid = jsonQ.quizid;
 		q._type = jsonQ.type;
@@ -556,6 +560,9 @@ export class Quiz {
 		q._verb = 'tomar';
 		q._verb_english = 'to take; to drink';
 		q._verb_type = 'regular';
+		q._verb_tense = VerbConjugationQuestion.TENSE_PRESENT; // this needs to be runtime value in db/etc.
+
+		q.title = 'Conjugate this verb in the ' + q._verb_tense + ' tense:';
 
 		// the five uses (we are not doing vosotros for now)
 		q._answer_yo = 'tomo';
