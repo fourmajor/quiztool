@@ -6,15 +6,22 @@ You can also now run 'npm run build' -- this will not, however, auto-refresh the
 
 You can also separately run 'npm start' and blah to get auto-refresh.
 
+To get a list of [objects] from the api, then head to:
+
+http://localhost:3000/api/[objects]
+
+If the API has a route set up for that, then you should get an array of JSON objects returned.
+
 # Configuration
 
 Create a file in the root directory called '.env'.
-
+```
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=s1mpl3
 DB_NAME=<etc>
 DB_PATH=<etc>
+```
 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-beta.32.3.
