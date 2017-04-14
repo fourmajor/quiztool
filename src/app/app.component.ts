@@ -574,7 +574,7 @@ export class Quiz {
 
 		// the five uses (we are not doing vosotros for now)
 		if (jsonQ.tense === 'Present'){
-			console.log('I am present...');
+			//console.log('I am present...');
 			q._answer_yo = 'tomo';
 			q._answer_tu = 'tomas';
 			q._answer_el_ella_usted = 'toma';
@@ -584,7 +584,7 @@ export class Quiz {
 			q._verb_tense = VerbConjugationQuestion.TENSE_PRESENT; // this needs to be runtime value in db/etc.
 		}
 		else if (jsonQ.tense === 'Past' ) {
-			console.log('I am past...');
+			//console.log('I am past...');
 			q._answer_yo = 'tome';
 			q._answer_tu = 'tomaste';
 			q._answer_el_ella_usted = 'tomo';
