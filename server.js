@@ -1,3 +1,14 @@
+// load config
+var configResult = require('dotenv').config()
+
+// check for config info
+if ('error' in configResult){
+    console.log('Configuration not obtained. Where is \'.env\' file? Shutting down.');
+    return;
+}
+//console.log(configResult);
+console.log('DB_HOME: ' + process.env.DB_HOST);
+
 // Get dependencies
 const express = require('express');
 const path = require('path');
