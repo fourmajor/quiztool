@@ -1,6 +1,8 @@
 // load config
 var configResult = require('dotenv').config()
 
+//console.log('test');
+
 // check for config info
 if ('error' in configResult){
     //console.log('Configuration not obtained. Where is \'.env\' file? Shutting down.');
@@ -50,7 +52,5 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port, () => console.log(`API running on localhost:${port}`));
-
-
 
 

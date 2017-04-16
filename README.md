@@ -1,5 +1,18 @@
 # Quiztool
 
+To run:
+
+```npm start```
+
+and
+
+```nodemon server.js```
+
+from separate console/terminal windows. This will give  you auto-reload of both the front end/ts, and back end/js.
+
+
+## Older startup that is still semi-working, but usually without auto-reload.
+
 To run the server: `node server.js`
 
 You can also now run 'npm run build' -- this will not, however, auto-refresh the app.
@@ -11,6 +24,19 @@ To get a list of [objects] from the api, then head to:
 http://localhost:3000/api/[objects]
 
 If the API has a route set up for that, then you should get an array of JSON objects returned.
+
+To connect to mongo from command line, set up your local mongo and give it some credentials, then log in like so:
+
+```
+mongo test -u 'duouser' -p 'duopass'
+```
+
+I have been often unable to log in from the mongo shell. It doesn't seem to matter what db i am 'using'. YMMV.
+
+```
+db.auth( <username>, <password> )
+```
+
 
 # Configuration
 

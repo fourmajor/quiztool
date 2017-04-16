@@ -5,6 +5,7 @@ import { appRouting } from './app.routing';
 import { HttpModule } from '@angular/http';
 
 import { PostsService } from './posts.service';
+import { DataService } from './data.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
@@ -15,10 +16,12 @@ import { NotFoundComponent } from './not-found.component';
 import { FillInTheBlankQuestionComponent } from './fill-in-the-blank-question.component';
 import { MultipleChoiceQuestionComponent } from './multiple-choice-question.component';
 import { VerbConjugationQuestionComponent } from './verb-conjugation-question.component';
+import { TranslateQuestionComponent } from './translate-question.component';
 
 import { FillInTheBlankQuestion } from './app.component';
 import { MultipleChoiceQuestion } from './app.component';
 import { VerbConjugationQuestion } from './app.component';
+import { TranslateQuestion } from './app.component';
 import { PostsComponent } from './posts/posts.component';
 
 @NgModule({
@@ -31,6 +34,7 @@ import { PostsComponent } from './posts/posts.component';
 	FillInTheBlankQuestionComponent,
 	MultipleChoiceQuestionComponent,
 	VerbConjugationQuestionComponent,
+	TranslateQuestionComponent,
 	PostsComponent
   ],
   imports: [
@@ -39,9 +43,9 @@ import { PostsComponent } from './posts/posts.component';
     appRouting,
     HttpModule
   ],
-  providers: [PostsService], // Add the posts service
+  providers: [PostsService, DataService], // Add the posts service
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
 }
 

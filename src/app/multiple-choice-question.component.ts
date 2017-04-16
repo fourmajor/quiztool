@@ -13,7 +13,7 @@ export class MultipleChoiceQuestionComponent extends Question {
 
 
 	// passing a question object to a question component is just beyond weird/stupid, but
-	// it's what Angular seems to want. 
+	// it's what Angular seems to want.
 	@Input() question:MultipleChoiceQuestion;
 
 	//_selectedAnswerId:number;
@@ -32,7 +32,7 @@ export class MultipleChoiceQuestionComponent extends Question {
 	deselectTheOtherAnswers(event,baseClass,selectedClass){
     	var l = event.target.parentElement.getElementsByClassName(baseClass);
     	var count = l.length;
-    	for(var i=0;i<count;i++){
+    	for( var i= 0 ;i < count; i++ ){
       		l[i].className = baseClass;
     	}
     	event.target.className = baseClass + ' ' + selectedClass;
@@ -51,7 +51,7 @@ export class MultipleChoiceQuestionComponent extends Question {
 		this.deselectTheOtherAnswers(event,'multiplechoiceanswer','answerselected');
 	}
 
-	focusOnFirstField:boolean = true;
+	focusOnFirstField: boolean = true;
 
     id: number;
     title: string;
@@ -60,8 +60,8 @@ export class MultipleChoiceQuestionComponent extends Question {
     _wasAnswered: boolean = false;
     quizid: number;
     quiz: Quiz; // include ref back to parent object, the Quiz
-    _focusSet:boolean = false;
-    _type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
+    _focusSet: boolean = false;
+    _type: string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
 
 
 
@@ -80,7 +80,7 @@ export class MultipleChoiceQuestionComponent extends Question {
 
 
 
-    setAnswered(torf:boolean){
+    setAnswered(torf: boolean){
         this._wasAnswered = torf;
     }
 
@@ -105,7 +105,7 @@ export class MultipleChoiceQuestionComponent extends Question {
     ngAfterViewInit(){
             // this is a crazy hack b/c Angular sucks
             setTimeout(() => {
-                if(this.focusThis) {
+                if( this.focusThis) {
 					//console.log('we have a focusThis element...');
 					this.focusThis.nativeElement.focus();
 				}
@@ -144,7 +144,7 @@ export class MultipleChoiceQuestionComponent extends Question {
     }
 
 
-	log(msg:string){
+	log(msg: string){
 		console.log(msg);
 	}
 }

@@ -10,22 +10,24 @@ if ('error' in configResult){
 }
 
 let DB_NODE_PACKAGE = 'mongodb';
-let DB_URL = 'mongodb://' + process.env.DB_HOST + ':' + process.env.DB_PORT + '/' + process.env.DB_NAME;
+let DB_URL = 'mongodb://' + process.env.DB_USER + ':' + process.env.DB_PASS + '@' + 
+            process.env.DB_HOST + ':' + process.env.DB_PORT + '/' + process.env.DB_NAME;
 
+console.log(DB_URL);
 
-getUsers();
+getWords();
 
 /*
 * Return a list of Users.
 */
-function getUsers(){
+function getWords(){
 
     var MongoClient = require(DB_NODE_PACKAGE).MongoClient;
 
     MongoClient.connect(DB_URL, function (err, db) {
         if (err) throw err
 
-        db.collection('users').find().toArray(function (err, result) {
+        db.collection('words').find().toArray(function (err, result) {
             //assert.equal(null, err);
             if (err) throw err
 

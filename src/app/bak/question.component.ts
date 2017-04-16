@@ -11,7 +11,7 @@ import { IQuestion, Question, Quiz } from './app.component';
 })
 export class QuestionComponent implements IQuestion {
 
-	focusOnFirstField:boolean = true;
+	focusOnFirstField: boolean = true;
 
     id: number;
     title: string;
@@ -20,14 +20,14 @@ export class QuestionComponent implements IQuestion {
     _wasAnswered: boolean = false;
     quizid: number;
     quiz: Quiz; // include ref back to parent object, the Quiz
-    _focusSet:boolean = false;
-    _type:string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
+    _focusSet: boolean = false;
+    _type: string; // fillintheblank, multiplechoice, fillintheblankcontext, verbconjugation, etc.
 
     wasCorrect(){
         // RED_FLAG -- add null checks
         if (this.wasAnswered() &&
-            (this.answer!='undefined') && (this.answer) &&
-            (this.useranswer!='undefined') && (this.useranswer) &&
+            (this.answer != 'undefined') && (this.answer) &&
+            (this.useranswer != 'undefined') && (this.useranswer) &&
             (this.useranswer.toLowerCase() == this.answer.toLowerCase()) ){
             //console.log('the answer for this question was correct...');
             return true;
@@ -36,7 +36,7 @@ export class QuestionComponent implements IQuestion {
     }
 
 
-    setAnswered(torf:boolean){
+    setAnswered(torf: boolean){
         this._wasAnswered = torf;
     }
 
@@ -63,7 +63,7 @@ export class QuestionComponent implements IQuestion {
     ngAfterViewInit(){
             // this is a crazy hack b/c Angular sucks
             setTimeout(() => {
-                if(this.focusThis) {
+                if (this.focusThis) {
 					//console.log('we have a focusThis element...');
 					this.focusThis.nativeElement.focus();
 				}
@@ -102,7 +102,7 @@ export class QuestionComponent implements IQuestion {
     }
 
 
-	log(msg:string){
+	log(msg: string){
 		console.log(msg);
 	}
 }

@@ -83,8 +83,7 @@
 
 
 
-
-
+<template [ngIf]="quiz.questions && quiz?.questions?.length>0">
 
 <div 	class="quizresults" 
         [ngClass]="{'hidden': ! quiz.hidden()}"
@@ -100,17 +99,21 @@ Hello, I am the quiz results. :)
 
 
 	<question-fill-in-the-blank [question]="quiz.getCurrentQuestion()"
-		*ngIf="quiz.getCurrentQuestion()._type==='FillInTheBlank'"></question-fill-in-the-blank>
+		*ngIf="quiz.getCurrentQuestion()?._type==='FillInTheBlank'"></question-fill-in-the-blank>
 
 	<question-multiple-choice [question]="quiz.getCurrentQuestion()"
-		*ngIf="quiz.getCurrentQuestion()._type==='MultipleChoice'"></question-multiple-choice>
+		*ngIf="quiz.getCurrentQuestion()?._type==='MultipleChoice'"></question-multiple-choice>
 
 	<question-verb-conjugation [question]="quiz.getCurrentQuestion()"
-		*ngIf="quiz.getCurrentQuestion()._type==='VerbConjugation'"></question-verb-conjugation>
+		*ngIf="quiz.getCurrentQuestion()?._type==='VerbConjugation'"></question-verb-conjugation>
 
-	<div *ngIf="false && quiz.getCurrentQuestion().wasAnswered()" class="quiz-done">
-	{{quiz.quiz_done_status_message}}
-	</div>
+	<question-translate [question]="quiz.getCurrentQuestion()"
+		*ngIf="quiz.getCurrentQuestion()?._type==='Translate'"></question-translate>
+
+
+<div *ngIf="false && quiz.getCurrentQuestion()?.wasAnswered()" class="quiz-done">
+    {{quiz.quiz_done_status_message}}
+    </div>
 
 </div> 
 
@@ -134,6 +137,8 @@ Hello, I am the quiz results. :)
 		(click)="submitForm();" 
 		type="button" #nextQuizButton 
 		id="nextQuizButton">Next Quiz</button>
+
+</template> <!-- only render above if we have more questions (data) -->
 
 </div><!-- END 'content' -->
 </div>

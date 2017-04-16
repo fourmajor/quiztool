@@ -20,7 +20,11 @@ if ('error' in configResult){
     return;
 }
 
-let DB_URL = 'mongodb://' + process.env.DB_HOST + ':' + process.env.DB_PORT + '/' + process.env.DB_NAME;
+let DB_URL = 'mongodb://'   + process.env.DB_USER + ':' 
+                            + process.env.DB_PASS + '@' 
+                            + process.env.DB_HOST + ':' 
+                            + process.env.DB_PORT + '/' 
+                            + process.env.DB_NAME;
 
 /* GET api listing. */
 /* this should only get called if the '/api' URL is seen, so..... */
@@ -33,8 +37,39 @@ router.get('/', (req, res) => {
 router.get('/posts', (req, res) => {
     MongoClient.connect(DB_URL, function (err, db) {
         if (err) throw err
+        //db.auth('admin','password');
         db.collection('posts').find().toArray(function (err, result) {
             if (err) throw err
+            res.send(result);
+        });
+        db.close();
+    });
+});
+
+
+// Get all posts (url is /api/words)
+router.get('/words', (req, res) => {
+    console.log('Going to get words...');
+    MongoClient.connect(DB_URL, function (err, db) {
+        if (err) throw err
+        //db.auth('admin','password');
+        db.collection('words').find().toArray(function (err, result) {
+            if (err) throw err
+            console.log('got  words...');
+            res.send(result);
+        });
+        db.close();
+    });
+});
+
+
+router.get('/questions', (req, res) => {
+    console.log('Going to get questions...');
+    MongoClient.connect(DB_URL, function (err, db) {
+        if (err) throw err
+        db.collection('questions').find().toArray(function (err, result) {
+            if (err) throw err
+            console.log('got questions...');
             res.send(result);
         });
         db.close();

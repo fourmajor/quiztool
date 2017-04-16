@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'about-page',
+    selector: 'app-about-page',
     template: `
         i am the about page
     `
