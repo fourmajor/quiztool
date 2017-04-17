@@ -5,11 +5,12 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json",
+    "start": "ng build  && node server.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build": "ng build  && node server.js",
+    "client": "ng serve --proxy-config proxy.conf.json",
     "server": "nodemon server.js"
   },
   "private": true,
