@@ -47,13 +47,15 @@ router.get('/posts', (req, res) => {
 });
 
 
-// Get all posts (url is /api/words)
+// Get a sample of words (url is /api/words)
 router.get('/words', (req, res) => {
+    let num_results = 10;
     console.log('Going to get words...');
     MongoClient.connect(DB_URL, function (err, db) {
         if (err) throw err
         //db.auth('admin','password');
-        db.collection('words').find().toArray(function (err, result) {
+        //db.collection('words').find().limit(num_results).toArray(function (err, result) {
+        db.collection('words').aggregate([{$sample: {size: num_results}}]).toArray( function(err, result) {
             if (err) throw err
             console.log('got  words...');
             res.send(result);
