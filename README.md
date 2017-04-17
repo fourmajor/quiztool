@@ -6,6 +6,19 @@ To run:
 
 and
 
+```npm run server```
+
+in two different console windows.
+
+
+---
+
+To run:
+
+```npm start```
+
+and
+
 ```nodemon server.js```
 
 from separate console/terminal windows. This will give  you auto-reload of both the front end/ts, and back end/js.

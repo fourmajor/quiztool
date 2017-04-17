@@ -12,7 +12,7 @@
 		yo <input  	[disabled]="question.wasAnswered()" 
 					[(ngModel)]="question._useranswer_yo" 	
 					[ngClass]="{'disabled': question.wasAnswered()}"
-					class="conjugation-input" #focusThis>
+					class="conjugation-input" #focusThis >
 			<span class="tooltip" 
 					[ngClass]="{'hidden': question.hideTooltextForThisParticularConjugation('yo')}"> 
 					{{question._answer_yo}} </span>

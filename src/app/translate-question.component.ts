@@ -61,14 +61,18 @@ export class TranslateQuestionComponent {
             // this is a crazy hack b/c Angular sucks
             setTimeout(() => {
                 if (this.focusThis) {
-					//console.log('we have a focusThis element...');
+					//console.log('Translate: we have a focusThis element...');
 					this.focusThis.nativeElement.focus();
 				}
+                else {
+                    //console.log('Translate: we do not have a focusThis element...');
+                }
             }, 1);
     }
 
     // this is seemingly called every time the view is affected, including every keystroke, entering text, etc.
     ngAfterViewChecked(){
+					this.focusThis.nativeElement.focus();
     }
 
 	log(msg: string){

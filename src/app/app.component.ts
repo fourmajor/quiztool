@@ -808,6 +808,13 @@ export class AppComponent implements OnInit {
 
 
    	questionAnimationStart(){
+        if(this.focusThis){
+            //console.log('we have a focusThis element...');
+        }
+        else{
+            //console.log('we do not have a focusThis element...');
+        }
+
 		if(this.focusThis && (! this._focusSet) ) {
 			//console.log('there is a focusThis element...');
 			this.focusThis.nativeElement.focus();

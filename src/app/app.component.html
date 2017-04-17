@@ -45,7 +45,7 @@
 				<div class="questiontitle">{{question.question}}</div>
 			</div>
 			<div class="useranswer">
-				<textarea   #focusThis
+				<textarea   #focusThi
    	                 [(ngModel)]="question.useranswer" 
    	                 [disabled]="quiz.wasEvaluated()"
    	                 [ngClass]="{'disabled': quiz.wasEvaluated()}"

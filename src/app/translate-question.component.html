@@ -12,12 +12,12 @@
 
     <div id="coltwo">
         <div class="useranswer">
-        <textarea   id="useranswer" #focusThis
+        <textarea   id="useranswer"
 					style=""
                     [(ngModel)]="question.useranswer" 
                     [disabled]="question.wasAnswered()"
                     [ngClass]="{'disabled': question.wasAnswered()}"
-                    class="textarea-default" rows="1" cols="20" placeholder="Type answer here...">
+                    class="textarea-default" rows="1" cols="20" placeholder="Type answer here..." #focusThis >
         </textarea>
         </div>
     </div>
