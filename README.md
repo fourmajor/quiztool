@@ -1,6 +1,6 @@
 # Quiztool
 
-To run:
+To run in debug on dev with automatic re-transpile:
 
 ```npm start```
 
@@ -9,6 +9,14 @@ and
 ```npm run server```
 
 in two different console windows.
+
+On prod, just run ```npm start```.
+
+If the app dies shortly thereafter, make sure mongodb is actually running:
+
+```sudo [mongo_home]/bin/mongod --fork --logpath /var/log/mongodb.log```
+
+(we need to put in some error-handling code)
 
 
 ---
