@@ -10,6 +10,13 @@ and
 
 in two different console windows.
 
+The mongo export dir is:
+
+https://github.com/fourmajor/quiztool/tree/master/dump/quiztool
+
+To import, using mongoimport i guess?
+
+
 On prod, just run ```npm start```.
 
 If the app dies shortly thereafter, make sure mongodb is actually running:
