@@ -5,7 +5,7 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "start": "ng build  && node server.js",
+    "start": "ng build && nohup node server.js &",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

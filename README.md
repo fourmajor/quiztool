@@ -17,6 +17,26 @@ https://github.com/fourmajor/quiztool/tree/master/dump/quiztool
 To import, using mongoimport i guess?
 
 
+
+Mongo authentication is a monster.
+
+Turn off mondodb auth when you start the server (just don't use the --auth switch --> 'mongod'), then run this command,
+then run the test db connectivity tool in /test dir.
+
+You prob have to use 'sudo' for everything.
+================================
+use quiztool
+db.createUser(
+    {
+      user: "duouser",
+      pwd: "duopass",
+      roles: [ {role:"dbOwner", db: "quiztool"} ]
+    }
+)
+================================
+
+
+
 On prod, just run ```npm start```.
 
 If the app dies shortly thereafter, make sure mongodb is actually running:
