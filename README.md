@@ -16,7 +16,24 @@ https://github.com/fourmajor/quiztool/tree/master/dump/quiztool
 
 To import, using mongoimport i guess?
 
-
+To insert Mongodb records/documents manually:
+-------------------------------
+db.quizzes.save( {id:1} )
+db.words.save(
+{
+	id: 1,
+	"spanish" : "fue",
+	"english" : "went"
+}
+)
+db.words.save(
+{
+	id: 2,
+	"spanish" : "gato",
+	"english" : "cat"
+}
+)
+-------------------------------
 
 Mongo authentication is a monster.
 
